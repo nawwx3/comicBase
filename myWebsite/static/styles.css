@@ -2,7 +2,19 @@ h1 {
     color:blue;
 }
 
-.jumbotron {
-    background-color:lightgreen !important;
-    margin-top:10px;
+.jumbotron.jumbotron-home {
+    margin-top: 10px;
+    text-align: center;
+    background-color: lightgreen;
+}
+
+.jumbotron.jumbotron-cb {
+  margin-top: 10px;
+  background-color: #7986CB;
+  color: white;
+  text-align: center;
+}
+
+.cb_backbround {
+  background-color: lightblue;
 }
