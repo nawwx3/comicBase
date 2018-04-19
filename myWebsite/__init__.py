@@ -1,5 +1,5 @@
 from flask import Flask, render_template
-from comicBase.other import comicBase_home
+from comicBase.comicBase import comicBase_home
 
 app = Flask(__name__)
 @app.route('/')
