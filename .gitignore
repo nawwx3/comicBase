@@ -1,1 +1,3 @@
 myWebsite/venv/*
+to_include.md
+*.pyc
