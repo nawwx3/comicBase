@@ -2,6 +2,30 @@ h1 {
     color:blue;
 }
 
+ul {
+    list-style-type: none; /* removes the bullets from the list */
+    margin: 0;    /* removes browser default settings */
+    padding: 0;   /* removes browser default settings */
+    overflow: hidden;
+    background-color: #7a7c79;
+    color: white;
+}
+
+li {
+    display: inline;  /* makes the list elements be in a line instead of vertcal */
+    border-right: 1px solid #bbb;
+}
+
+li a {
+  padding: 12px;
+  color: white;
+
+}
+
+li a:hover {
+  color: lightgreen
+}
+
 .jumbotron.jumbotron-home {
     margin-top: 10px;
     text-align: center;
