@@ -1,19 +1,5 @@
-<!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="../static/styles.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <title>nathanwelch.me</title>
-
-  </head>
-
-  <body style="background-color:#d3e8d7;font-family:Verdana, Geneva, sans-serif">
-
-    <ul>
-      <li><a href="default.asp">Home</a></li>
-      <li><a href="news.asp">About Me</a></li>
-      <li><a href="contact.asp">Projects</a></li>
-    </ul>
+{% extends "myWebsite_header.html" %}
+{% block body %}
 
     <div class="container">
       <div class="jumbotron jumbotron-home">
@@ -24,5 +10,4 @@
       </div>
       <p>Then there was some text out here too...</p>
     </div>
-  </body>
-</html>
+{% endblock %}

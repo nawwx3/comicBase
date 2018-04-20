@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <link rel="stylesheet" href="../static/styles.css">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+    <title>comicBase</title>
+  </head>
+
+  <body class="cb_backbround">
+
+
+    <ul>
+      <li><a href="{{ url_for('comicBase_home_page') }}">Home</a></li>
+      
+    </ul>
+
+  {% block body %} {% endblock %}
+
+  </body>
+</html>
