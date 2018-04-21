@@ -26,6 +26,44 @@ li a:hover {
   color: lightgreen
 }
 
+form {
+  text-align: center;
+}
+
+.centered {
+  position: fixed;
+  top:15%;
+  left: 50%;
+  /* bring your own prefixes */
+  transform: translate(-50%, -50%);
+}
+
+.login {
+  margin-bottom: 5px;
+  height: 35px;
+  width:200px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    width: 160px;
+    height: 35px;
+}
+
+.button2 {
+  background-color: #008CBA;
+  border-radius: 8px;
+}
+
 .jumbotron.jumbotron-home {
     margin-top: 10px;
     text-align: center;
