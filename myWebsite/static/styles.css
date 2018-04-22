@@ -10,6 +10,21 @@ ul {
     background-color: #7a7c79;
     color: white;
 }
+/*
+.container.container1 {
+  padding-left: 0px;
+} */
+
+.flashes {
+  padding: 10px 20px;  /* vertical horizontal */
+  background-color: #66ffb3;  /* 70% */
+  border-style: solid;
+  border-width: 2px;
+  border-color: #00e673;   /* 45% */
+  color: black;
+  font-size: 18px;
+  border-radius: 8px;
+}
 
 li {
     display: inline;  /* makes the list elements be in a line instead of vertcal */
@@ -32,7 +47,7 @@ form {
 
 .centered {
   position: fixed;
-  top:15%;
+  top:50%;
   left: 50%;
   /* bring your own prefixes */
   transform: translate(-50%, -50%);
