@@ -6,11 +6,20 @@ def cb_home():
 def cb_login(app):
     error = None
     if request.method == 'POST':
-        if request.form['login_username'] !=  app.config['USERNAME']:
-            error = 'Invalid username/password'
-        elif request.form['login_password'] != app.config['PASSWORD']:
-            error = 'Invalid username/password'
+        if request.form['login_username'] !=  app.config['USERNAME'] or request.form['login_password'] != app.config['PASSWORD']:
+            flash('Invalid username/password', 'error')
         else:
             session['logged_in'] = True
-            return (redirect(url_for('cb_home_page')), 'Successfully Logged In')
-    return (render_template('cb_login.html', error=error), '')
+            flash('Successfully logged in!')
+            return redirect(url_for('cb_home_page'))
+    return render_template('cb_login.html')
+
+# @require_login
+def cb_logout(app):
+    session.pop('login_username', None)
+    session['logged_in'] = False
+    flash('Successfully logged out!')
+    return redirect(url_for('cb_home_page'))
+
+def cb_add_comic():
+    return render_template('cb_add_comic.html')

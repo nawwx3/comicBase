@@ -3,7 +3,7 @@ from flask import Flask, render_template, session, request, flash, redirect, url
 import os
 
 
-from comicBase.comicBase import cb_home, cb_login
+from comicBase.comicBase import cb_home, cb_login, cb_logout, cb_add_comic
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -35,16 +35,19 @@ def projects():
 
 @app.route('/comicBase')
 def cb_home_page():
-    flash('this is the home page')
     return cb_home()
 
 @app.route('/login', methods=['GET', 'POST'])
 def cb_login_page():
-    a = cb_login(app)
-    if a[1] not in [None, '']:
-        flash(a[1])
-    return a[0]
-    # return render_template('cb_login.html')
+    return cb_login(app)
+
+@app.route('/logout')
+def cb_logout_page():
+    return cb_logout(app)
+
+@app.route('/add_comic')
+def cb_add_comic_page():
+    return cb_add_comic()
 
 if __name__ == '__main__':
     app.run()
