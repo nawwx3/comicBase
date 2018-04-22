@@ -1,5 +1,5 @@
 myWebsite/venv/*
 to_include.md
 *.pyc
-*comics_database.db
+*.db
 

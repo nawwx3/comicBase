@@ -85,8 +85,8 @@ def cb_logout_page():
 def cb_add_comic_page():
     return cb_add_comic()
 
-@app.route('/list')
-def list():
+@app.route('/display_comics')
+def cb_display_page():
    conn = sqlite3.connect("comics_database.db")
    conn.row_factory = sqlite3.Row
 

@@ -51,6 +51,6 @@ def cb_add_comic():
         finally:
             conn.close()
             print('closed the connection')
-            return redirect(url_for('list'))
+            return redirect(url_for('cb_display_page'))
 
     return render_template('cb_add_comic.html')
