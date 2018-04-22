@@ -1,0 +1,18 @@
+{% extends "cb_header.html" %}
+{% block body %}
+
+  <table border = 1>
+    <thread>
+      <td>Issue Name</td>
+      <td>Issue Number</td>
+    </thead>
+    {% for row in rows %}
+      <tr>
+        <td>{{ row['issue_name'] }}</td>
+        <td>{{ row['issue_number'] }}</td>
+      </tr>
+    {% endfor %}
+
+  </table>
+
+{% endblock %}
