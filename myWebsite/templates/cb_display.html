@@ -1,18 +1,37 @@
 {% extends "cb_header.html" %}
 {% block body %}
+<div class="container">
 
-  <table border = 1>
-    <thread>
-      <td>Issue Name</td>
-      <td>Issue Number</td>
-    </thead>
-    {% for row in rows %}
-      <tr>
-        <td>{{ row['issue_name'] }}</td>
-        <td>{{ row['issue_number'] }}</td>
-      </tr>
-    {% endfor %}
 
-  </table>
+
+  <div class="jumbotron">
+    <h2>Comics Display</h2>
+    <table id="table" border = 1>
+      <thread>
+        <td class="farts">Issue Name</td>
+        <td class="farts">Issue Number</td>
+        <td class="farts">Volume</td>
+        <td class="farts">Title</td>
+        <td class="farts">Arc</td>
+        <td class="farts">Price</td>
+        <td class="farts"></td>
+      </thead>
+      {% for row in rows %}
+        <tr>
+          <td>{{ row['issue_name'] }}</td>
+          <td>{{ row['issue_number'] }}</td>
+          <td>{{ row['volume'] }}</td>
+          <td>{{ row['title'] }}</td>
+          <td>{{ row['arc'] }}</td>
+          <td>{{ row['price'] }}</td>
+          <td>
+            <a class="button button3" href="{{ url_for('cb_delete_comic', id=row['id']) }}">x</a>
+          </td>
+        </tr>
+      {% endfor %}
+
+    </table>
+  </div>
+</div>
 
 {% endblock %}

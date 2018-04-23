@@ -27,8 +27,12 @@ def cb_add_comic():
         print('We at least got here')
         try:
             print('and are inside the try')
-            name = request.form['name']
-            num = request.form['num']
+            name = request.form['issue_name']
+            num = request.form['issue_number']
+            volume = request.form['volume']
+            title = request.form['title']
+            arc = request.form['arc']
+            price = request.form['price']
 
             print(name, num)
 
@@ -36,9 +40,10 @@ def cb_add_comic():
                 print('is it connecting')
                 cur = conn.cursor()
 
-                cur.execute('INSERT INTO comics (issue_name, issue_number) VALUES (?,?)',(name, num) )
+                cur.execute('''
+                    INSERT INTO comics (issue_name, issue_number, volume, title, arc, price)
+                    VALUES (?,?,?,?,?,?)''',(name, num, volume, title, arc, price) )
 
-                print('it has executed')
                 conn.commit()
                 print('comic added successfully')
                 flash('Record successfully added')
@@ -54,3 +59,34 @@ def cb_add_comic():
             return redirect(url_for('cb_display_page'))
 
     return render_template('cb_add_comic.html')
+
+def cb_delete(id):
+    try:
+        with sqlite3.connect('comics_database.db') as conn:
+            cur = conn.cursor()
+
+            cur.execute('''  DELETE FROM comics
+                            WHERE id={}  '''
+                            .format(id))
+
+            conn.commit()
+            print('comic deleted successfully')
+            flash('Record successfully deleted!')
+    except:
+        conn.rollback()
+        print('FAILED TO DELETE COMIC')
+        conn.close()
+        flash('error in insert operation', 'error')
+    finally:
+        conn.close()
+        print('closed the connection')
+        return redirect(url_for('cb_display_page'))
+        rows = cur.fetchall()
+
+    return render_template("cb_display.html", rows=rows)
+
+
+
+
+
+# end
