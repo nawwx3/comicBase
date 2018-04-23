@@ -78,6 +78,14 @@ form {
   border-radius: 8px;
 }
 
+.button3 {
+  width: 25px;
+  height: 25px;
+  border-radius: 8px;
+  background-color: red;
+  text-align: center;
+}
+
 .jumbotron.jumbotron-home {
     margin-top: 10px;
     text-align: center;
@@ -154,3 +162,26 @@ form {
 
 .dropdown:hover .dropdown-content {
     display: block;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+td, th {
+    border: 1px solid #dddddd;
+    text-align: center;
+    padding: 8px;
+    font-size: 15px;
+}
+
+tr:nth-child(even) {
+    background-color: #dddddd;
+}
+
+.farts {
+  font-size: 16px;
+  font-weight: bold;
+}

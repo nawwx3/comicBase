@@ -1,12 +1,17 @@
 import sqlite3
+from flask import Flask
 
-# make a connection to the database
-conn = sqlite3.connect('comics_database.db')
-print("Opened database successfully")
+app = Flask(__name__)
 
-# if there is not a comic book table, create it
-conn.execute('CREATE TABLE IF NOT EXISTS comics (issue_name TEXT, issue_number TEXT)')
-print("Table created successfully")
+db = sqlite3.connect('comics_database.db')
+db.execute('DROP TABLE IF exists comics')
+print('comics table dropped')
+
+# inserts the tables into the database
+with app.open_resource('sql/tables.sql', mode='r') as f:
+    db.cursor().executescript(f.read())
+db.commit()
+print("Database initialized!")
 
 # close the connection
-conn.close()
+db.close()

@@ -3,7 +3,7 @@ import sqlite3
 from functools import wraps
 import os
 
-from comicBase.comicBase import cb_home, cb_login, cb_logout, cb_add_comic
+from comicBase.comicBase import cb_home, cb_login, cb_logout, cb_add_comic, cb_delete
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -87,14 +87,20 @@ def cb_add_comic_page():
 
 @app.route('/display_comics')
 def cb_display_page():
-   conn = sqlite3.connect("comics_database.db")
-   conn.row_factory = sqlite3.Row
+   db = sqlite3.connect("comics_database.db")
+   db.row_factory = sqlite3.Row
 
-   cur = conn.cursor()
-   cur.execute("select * from comics")
+   cur = db.cursor()
+   cur.execute(""" SELECT *
+                    FROM comics
+                    ORDER BY issue_name, issue_number ASC""")
 
-   rows = cur.fetchall();
+   rows = cur.fetchall()
    return render_template("cb_display.html",rows = rows)
+
+@app.route('/delete_comic/<id>')
+def cb_delete_comic(id):
+    return cb_delete(id)
 
 if __name__ == '__main__':
     app.run()
