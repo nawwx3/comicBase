@@ -16,6 +16,13 @@ app.config.update(dict(
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
 
+
+    ########################################
+    #####                              #####
+    #####    INITIAL DATABASE STUFF    #####
+    #####                              #####
+    ########################################
+
 def get_db():
     db = getattr(g, '_database', None)
     if db is None:
@@ -45,12 +52,18 @@ def init_db():
             db.cursor().executescript(f.read())
         db.commit()
 
-
 @app.cli.command('initdb')
 def initdb_command():
     """Initializes the database."""
     init_db()
     print('Initialized the database.')
+
+
+########################################
+#####                              #####
+#####        HOMEPAGE STUFF        #####
+#####                              #####
+########################################
 
 
 @app.route('/')
@@ -67,6 +80,12 @@ def projects():
     return render_template('mw_projects.html')
 
 
+
+########################################
+#####                              #####
+#####        COMICBASE STUFF       #####
+#####                              #####
+########################################
 
 
 @app.route('/comicBase')
@@ -87,20 +106,53 @@ def cb_add_comic_page():
 
 @app.route('/display_comics')
 def cb_display_page():
-   db = sqlite3.connect("comics_database.db")
-   db.row_factory = sqlite3.Row
+    with sqlite3.connect('comics_database.db') as conn:
+        cur = conn.cursor()
+        # collect all table names
+        cur.execute('''SELECT titles from comics''')
+        tables = cur.fetchall()
 
-   cur = db.cursor()
-   cur.execute(""" SELECT *
-                    FROM comics
-                    ORDER BY issue_name, issue_number ASC""")
+        rows = [] # list of entries
+        # for each of the tables, get their info
+        for table in tables:
+            name = table[0]
 
-   rows = cur.fetchall()
-   return render_template("cb_display.html",rows = rows)
+            # get all the entries from table
+            cur.execute('''SELECT * from {}'''.format(name))
+            table_entries = cur.fetchall()
 
-@app.route('/delete_comic/<id>')
-def cb_delete_comic(id):
-    return cb_delete(id)
+            # title info storage
+            # ( _ delim issue name )_(volume number)
+
+            title_info = table[0].split('_')
+            volume = title_info[-1]  # the last one is the volume information
+            issue_list = title_info[0:-1] # issue name is everything else
+            issue = ''
+            # reconstruct the issue name
+            for word in issue_list:
+                if issue != '':
+                    issue += ' '
+                issue += word
+            issue = issue.title()   # then make first lettes capital
+
+            for entry in table_entries:
+                rows.append([issue, entry[1], volume, entry[2], entry[3], entry[4], name, entry[0]])
+
+
+    # <td>{{ row['issue_name'] }}</td>
+    # <td>{{ row['issue_number'] }}</td>
+    # <td>{{ row['volume'] }}</td>
+    # <td>{{ row['title'] }}</td>
+    # <td>{{ row['arc'] }}</td>
+    # <td>{{ row['price'] }}</td>
+
+    # return render_template("cb_display.html")
+    return render_template("cb_display.html",rows = rows)
+
+@app.route('/delete_comic/<table>/<id>')
+def cb_delete_comic(table, id):
+    print('here\'s the table: ', table, "  :", id)
+    return cb_delete(table, id)
 
 if __name__ == '__main__':
     app.run()

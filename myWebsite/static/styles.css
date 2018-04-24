@@ -27,6 +27,11 @@ ul {
   border-color: #e60000;
 }
 
+.warn {
+  background-color: #ffff66;
+  border-color: #e6e600;
+}
+
 li {
     display: inline;  /* makes the list elements be in a line instead of vertcal */
 }
