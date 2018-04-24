@@ -24,7 +24,6 @@ def cb_logout(app):
 
 def cb_add_comic():
     if request.method == 'POST':
-        print('We at least got here')
         try:
             print('and are inside the try')
             name = request.form['issue_name']
@@ -34,19 +33,46 @@ def cb_add_comic():
             arc = request.form['arc']
             price = request.form['price']
 
-            print(name, num)
+            print(name, num, volume)
+            issue_name = name.lower()
+            table_title = issue_name.lstrip().rstrip().replace(' ', '_')+'_'+str(volume)
+            print('|{}|'.format(table_title))
 
+            # open a connection to the database
             with sqlite3.connect('comics_database.db') as conn:
                 print('is it connecting')
                 cur = conn.cursor()
 
+                # if the table has not been made yet then make it
                 cur.execute('''
-                    INSERT INTO comics (issue_name, issue_number, volume, title, arc, price)
-                    VALUES (?,?,?,?,?,?)''',(name, num, volume, title, arc, price) )
+                    CREATE TABLE if not exists {} (
+                        id integer primary key autoincrement,
+                        issue_number varchar(5) not null,
+                        title varchar(100),
+                        arc varchar(50),
+                        price float
+                    );
+                '''.format(table_title))
+
+                # add the entry into the table
+                cur.execute('''
+                    INSERT INTO {} (issue_number, title, arc, price)
+                    VALUES (?,?,?,?)
+                    '''.format(table_title),(num, title, arc, price) )
+
+                # try to add table_name into comics
+                try:
+                    cur.execute('''
+                        INSERT INTO comics (titles)
+                        VALUES (?)''', [table_title] )
+                except:
+                    # if it doesn't work its already in there
+                    pass
 
                 conn.commit()
                 print('comic added successfully')
                 flash('Record successfully added')
+
         except:
             conn.rollback()
             print('FAILED TO ENTER COMIC')
@@ -60,32 +86,57 @@ def cb_add_comic():
 
     return render_template('cb_add_comic.html')
 
-def cb_delete(id):
+def cb_delete(table, id):
+
     try:
         with sqlite3.connect('comics_database.db') as conn:
             cur = conn.cursor()
 
-            cur.execute('''  DELETE FROM comics
+            cur.execute('''  DELETE FROM {}
                             WHERE id={}  '''
-                            .format(id))
+                            .format(table, id))
 
             conn.commit()
-            print('comic deleted successfully')
-            flash('Record successfully deleted!')
+            flash('Record successfully deleted!'    )
     except:
         conn.rollback()
-        print('FAILED TO DELETE COMIC')
         conn.close()
-        flash('error in insert operation', 'error')
+        flash('Error in delete operation', 'error')
     finally:
         conn.close()
-        print('closed the connection')
         return redirect(url_for('cb_display_page'))
-        rows = cur.fetchall()
 
-    return render_template("cb_display.html", rows=rows)
+    flash('Refresh page!', 'warn')
+    return render_template("cb_display.html")
 
 
+
+
+
+
+def table_exitsts(conn, table):
+    cur = conn.cursor()
+    print('  table_exitsts made connecton')
+
+    SQL = '''SHOW *'''
+    cur.execute(SQL)
+    results = cur.fetchall()
+    print('All existing tables:', results) # Returned as a list of tuples
+
+
+    # cur.execute('''
+    #     SELECT COUNT(*)
+    #     FROM comics
+    #     WHERE titles = {}'''.format(table))
+    # print('  table_exitsts #tables: {}'.format(cur.fetchone()[0]))
+    # if cur.fetchone()[0] == 1:
+    #     print('  returns True')
+    #     dbcur.close()
+    #     return True
+    #
+    # print('  returns False')
+    # cur.close()
+    # return False
 
 
 

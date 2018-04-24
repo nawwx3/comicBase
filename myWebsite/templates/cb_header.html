@@ -21,6 +21,7 @@
       {% if session['logged_in'] %}
         <a href="{{ url_for('cb_logout_page') }}">Logout</a>
         <a href="{{ url_for('cb_add_comic_page') }}">Add Comic</a>
+        <a href="{{ url_for('cb_display_page') }}">Show Comics</a>
       {% else %}
         <a href="{{ url_for('cb_login_page') }}">Login</a>
       {% endif %}
