@@ -110,33 +110,4 @@ def cb_delete(table, id):
 
 
 
-
-
-
-def table_exitsts(conn, table):
-    cur = conn.cursor()
-    print('  table_exitsts made connecton')
-
-    SQL = '''SHOW *'''
-    cur.execute(SQL)
-    results = cur.fetchall()
-    print('All existing tables:', results) # Returned as a list of tuples
-
-
-    # cur.execute('''
-    #     SELECT COUNT(*)
-    #     FROM comics
-    #     WHERE titles = {}'''.format(table))
-    # print('  table_exitsts #tables: {}'.format(cur.fetchone()[0]))
-    # if cur.fetchone()[0] == 1:
-    #     print('  returns True')
-    #     dbcur.close()
-    #     return True
-    #
-    # print('  returns False')
-    # cur.close()
-    # return False
-
-
-
 # end

@@ -72,7 +72,6 @@ def home():
 
 @app.route('/about_me')
 def about_me():
-    flash('all the tests are happening')
     return render_template('mw_about_me.html')
 
 @app.route('/projects')
