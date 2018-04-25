@@ -23,40 +23,40 @@ app.config.from_envvar('FLASKR_SETTINGS', silent=True)
     #####                              #####
     ########################################
 
-def get_db():
-    db = getattr(g, '_database', None)
-    if db is None:
-        db = g._database = sqlite3.connect(DATABASE)
-    return db
+#def get_db():
+#    db = getattr(g, '_database', None)
+#    if db is None:
+#        db = g._database = sqlite3.connect(DATABASE)
+#    return db
 
-@app.teardown_appcontext
-def close_connection(exception):
-    db = getattr(g, '_database', None)
-    if db is not None:
-        db.close()
+#@app.teardown_appcontext
+#def close_connection(exception):
+#    db = getattr(g, '_database', None)
+#    if db is not None:
+#        db.close()
 
-def connect_db():
-    rv = sqlite3.connect(app.config['DATABASE'])
-    rv.row_factory = sqlite3.Row
-    return rv
+#def connect_db():
+#    rv = sqlite3.connect(app.config['DATABASE'])
+#    rv.row_factory = sqlite3.Row
+#    return rv
 
-def init_db():
-    with app.app_context():
-        db = get_db()
+#def init_db():
+#    with app.app_context():
+#        db = get_db()
         # inserts the tables into the database
-        with app.open_resource('sql/tables.sql', mode='r') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
+#        with app.open_resource('sql/tables.sql', mode='r') as f:
+#            db.cursor().executescript(f.read())
+#        db.commit()
         # inserts data into those tables
-        with app.open_resource('sql/entries.sql', mode='r') as f:
-            db.cursor().executescript(f.read())
-        db.commit()
+#        with app.open_resource('sql/entries.sql', mode='r') as f:
+#            db.cursor().executescript(f.read())
+#        db.commit()
 
-@app.cli.command('initdb')
-def initdb_command():
-    """Initializes the database."""
-    init_db()
-    print('Initialized the database.')
+#@app.cli.command('initdb')
+#def initdb_command():
+#    """Initializes the database."""
+#    init_db()
+#    print('Initialized the database.')
 
 
 ########################################
@@ -106,7 +106,7 @@ def cb_add_comic_page():
 
 @app.route('/display_comics')
 def cb_display_page():
-    with sqlite3.connect('comics_database.db') as conn:
+    with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
         cur = conn.cursor()
         # collect all table names
         cur.execute('''SELECT titles from comics''')

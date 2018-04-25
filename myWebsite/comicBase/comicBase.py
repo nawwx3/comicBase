@@ -39,26 +39,25 @@ def cb_add_comic():
             print('|{}|'.format(table_title))
 
             # open a connection to the database
-            with sqlite3.connect('comics_database.db') as conn:
+            with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
                 print('is it connecting')
                 cur = conn.cursor()
 
+                print('after cur is made')
+
                 # if the table has not been made yet then make it
-                cur.execute('''
-                    CREATE TABLE if not exists {} (
+                cur.execute('''CREATE TABLE if not exists {} (
                         id integer primary key autoincrement,
                         issue_number varchar(5) not null,
                         title varchar(100),
                         arc varchar(50),
-                        price float
-                    );
-                '''.format(table_title))
+                        price float);'''.format(table_title))
+
+                print('after first execute')
 
                 # add the entry into the table
-                cur.execute('''
-                    INSERT INTO {} (issue_number, title, arc, price)
-                    VALUES (?,?,?,?)
-                    '''.format(table_title),(num, title, arc, price) )
+                cur.execute('''  INSERT INTO {} (issue_number, title, arc, price)
+                    VALUES (?,?,?,?)  '''.format(table_title),(num, title, arc, price) )
 
                 # try to add table_name into comics
                 try:
@@ -73,14 +72,14 @@ def cb_add_comic():
                 print('comic added successfully')
                 flash('Record successfully added')
 
-        except:
+        except Exception as e:
+            print('inside the except', e)
             conn.rollback()
             print('FAILED TO ENTER COMIC')
-            conn.close()
             flash('error in insert operation', 'error')
 
         finally:
-            conn.close()
+            print('inside the finally')
             print('closed the connection')
             return redirect(url_for('cb_display_page'))
 
@@ -89,7 +88,7 @@ def cb_add_comic():
 def cb_delete(table, id):
 
     try:
-        with sqlite3.connect('comics_database.db') as conn:
+        with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
             cur = conn.cursor()
 
             cur.execute('''  DELETE FROM {}
