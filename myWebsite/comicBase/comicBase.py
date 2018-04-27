@@ -1,5 +1,24 @@
-from flask import Flask, render_template, session, request, flash, redirect, url_for
+from flask import Flask, render_template, session, request, flash, redirect, url_for, g
+from functools import wraps
 import sqlite3
+
+def require_login(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if not session['logged_in']:
+            flash('You must be logged in to access that page', 'warn')
+            return redirect(url_for('cb_login_page', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
+
+def require_logout(f):
+    @wraps(f)
+    def decorated_function(*args, **kwargs):
+        if session['logged_in']:
+            flash('You must be logged out to access that page', 'warn')
+            return redirect(url_for('cb_login_page', next=request.url))
+        return f(*args, **kwargs)
+    return decorated_function
 
 def cb_home():
     return render_template('cb_home.html')
@@ -15,17 +34,17 @@ def cb_login(app):
             return redirect(url_for('cb_home_page'))
     return render_template('cb_login.html')
 
-# @require_login
+@require_login
 def cb_logout(app):
     session.pop('login_username', None)
     session['logged_in'] = False
     flash('Successfully logged out!')
     return redirect(url_for('cb_home_page'))
 
+@require_login
 def cb_add_comic():
     if request.method == 'POST':
         try:
-            print('and are inside the try')
             name = request.form['issue_name']
             num = request.form['issue_number']
             volume = request.form['volume']
@@ -33,13 +52,12 @@ def cb_add_comic():
             arc = request.form['arc']
             price = request.form['price']
 
-            print(name, num, volume)
             issue_name = name.lower()
             table_title = issue_name.lstrip().rstrip().replace(' ', '_')+'_'+str(volume)
-            print('|{}|'.format(table_title))
 
             # open a connection to the database
-            with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
+            # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
+            with sqlite3.connect('comics_database.db') as conn:
                 print('is it connecting')
                 cur = conn.cursor()
 
@@ -64,8 +82,10 @@ def cb_add_comic():
                     cur.execute('''
                         INSERT INTO comics (titles)
                         VALUES (?)''', [table_title] )
+                    print('------------- Insert successful')
                 except:
                     # if it doesn't work its already in there
+                    print('------------  it was already there')
                     pass
 
                 conn.commit()
@@ -85,19 +105,39 @@ def cb_add_comic():
 
     return render_template('cb_add_comic.html')
 
+@require_login
 def cb_delete(table, id):
 
     try:
-        with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
+        # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
+        with sqlite3.connect('comics_database.db') as conn:
+            print('\n')
             cur = conn.cursor()
 
-            cur.execute('''  DELETE FROM {}
+            print('type: ', type(table), type(id))
+
+            cur.execute(''' DELETE FROM {}
                             WHERE id={}  '''
                             .format(table, id))
 
             conn.commit()
-            flash('Record successfully deleted!'    )
-    except:
+            flash('Record successfully deleted!')
+
+            cur.execute(''' SELECT COUNT(id)
+                            FROM {}'''.format(table))
+            a = cur.fetchall()
+            print('number id in {}:  {}'.format(table, a[0][0]))
+            if a[0][0] == 0:
+
+                # drop the table hen have to delete the entry from 'comics' table
+                cur.execute('''DROP TABLE {}'''.format(table))
+                cur.execute("DELETE FROM comics WHERE titles=?", (table,))
+
+                flash('Table empty, deleted table {}'.format(table), 'warn')
+                conn.commit()
+
+    except Exception as e:
+        print('error: ', e)
         conn.rollback()
         conn.close()
         flash('Error in delete operation', 'error')

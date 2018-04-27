@@ -6,8 +6,6 @@ app = Flask(__name__)
 
 db = sqlite3.connect('comics_database.db')
 
-db.execute('DROP TABLE IF EXISTS name_vol')
-
 db.execute('DROP TABLE IF exists comics')
 print('comics table dropped')
 

@@ -9,55 +9,12 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 app.config.update(dict(
-    DATABASE=os.path.join(app.root_path, 'database.db'),
+    DATABASE=os.path.join(app.root_path, 'comics_database.db'),
     SECRET_KEY='development_key',
     USERNAME='f',
     PASSWORD='f'
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
-
-
-    ########################################
-    #####                              #####
-    #####    INITIAL DATABASE STUFF    #####
-    #####                              #####
-    ########################################
-
-#def get_db():
-#    db = getattr(g, '_database', None)
-#    if db is None:
-#        db = g._database = sqlite3.connect(DATABASE)
-#    return db
-
-#@app.teardown_appcontext
-#def close_connection(exception):
-#    db = getattr(g, '_database', None)
-#    if db is not None:
-#        db.close()
-
-#def connect_db():
-#    rv = sqlite3.connect(app.config['DATABASE'])
-#    rv.row_factory = sqlite3.Row
-#    return rv
-
-#def init_db():
-#    with app.app_context():
-#        db = get_db()
-        # inserts the tables into the database
-#        with app.open_resource('sql/tables.sql', mode='r') as f:
-#            db.cursor().executescript(f.read())
-#        db.commit()
-        # inserts data into those tables
-#        with app.open_resource('sql/entries.sql', mode='r') as f:
-#            db.cursor().executescript(f.read())
-#        db.commit()
-
-#@app.cli.command('initdb')
-#def initdb_command():
-#    """Initializes the database."""
-#    init_db()
-#    print('Initialized the database.')
-
 
 ########################################
 #####                              #####
@@ -78,6 +35,12 @@ def about_me():
 def projects():
     return render_template('mw_projects.html')
 
+
+
+
+@app.route('/test')
+def test():
+    return render_template('test.html')
 
 
 ########################################
@@ -105,11 +68,14 @@ def cb_add_comic_page():
 
 @app.route('/display_comics')
 def cb_display_page():
-    with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
+    # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
+    with sqlite3.connect('comics_database.db') as conn:
         cur = conn.cursor()
         # collect all table names
         cur.execute('''SELECT titles from comics''')
         tables = cur.fetchall()
+
+        print('tables: ', tables)
 
         rows = [] # list of entries
         # for each of the tables, get their info
@@ -136,14 +102,6 @@ def cb_display_page():
 
             for entry in table_entries:
                 rows.append([issue, entry[1], volume, entry[2], entry[3], entry[4], name, entry[0]])
-
-
-    # <td>{{ row['issue_name'] }}</td>
-    # <td>{{ row['issue_number'] }}</td>
-    # <td>{{ row['volume'] }}</td>
-    # <td>{{ row['title'] }}</td>
-    # <td>{{ row['arc'] }}</td>
-    # <td>{{ row['price'] }}</td>
 
     # return render_template("cb_display.html")
     return render_template("cb_display.html",rows = rows)
