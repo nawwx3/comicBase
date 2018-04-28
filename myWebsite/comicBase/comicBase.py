@@ -146,8 +146,32 @@ def cb_delete(table, id):
         return redirect(url_for('cb_display_page'))
 
     flash('Refresh page!', 'warn')
-    return render_template("cb_display.html")
+    return render_template('cb_display.html')
 
 
+@require_login
+def cb_search():
+    if request.method == 'POST':
+        name = request.form['issue_name']
+        num = request.form['issue_number']
+        volume = request.form['volume']
+        title = request.form['title']
+        arc = request.form['arc']
+
+
+
+
+        # search through to see if there are any
+        # first find "name_volume" pairs in "comics"
+        if name != '' and volume != '':
+            with sqlite3.connect('comics_database.db') as conn:
+                cur = conn.cursor()
+                cur.execute(''' SELECT FROM {}'''.format(name+'_'+volume))
+                rows = cur.fetchall()
+
+
+
+        print(name, num, volume, title, arc)
+    return render_template('cb_display.html', rows=rows)
 
 # end

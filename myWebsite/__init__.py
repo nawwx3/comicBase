@@ -3,7 +3,7 @@ import sqlite3
 from functools import wraps
 import os
 
-from comicBase.comicBase import cb_home, cb_login, cb_logout, cb_add_comic, cb_delete
+from comicBase.comicBase import cb_home, cb_login, cb_logout, cb_add_comic, cb_delete, cb_search
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -36,7 +36,11 @@ def projects():
     return render_template('mw_projects.html')
 
 
-
+########################################
+#####                              #####
+#####          OTHER STUFF         #####
+#####                              #####
+########################################
 
 @app.route('/test')
 def test():
@@ -110,6 +114,10 @@ def cb_display_page():
 def cb_delete_comic(table, id):
     print('here\'s the table: ', table, "  :", id)
     return cb_delete(table, id)
+
+@app.route('/search_comics', methods=['GET', 'POST'])
+def cb_search_page():
+    return cb_search()
 
 if __name__ == '__main__':
     app.run()
