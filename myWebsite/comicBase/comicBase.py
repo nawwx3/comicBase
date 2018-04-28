@@ -2,6 +2,8 @@ from flask import Flask, render_template, session, request, flash, redirect, url
 from functools import wraps
 import sqlite3
 
+import comicBase.helper as helper
+
 def require_login(f):
     @wraps(f)
     def decorated_function(*args, **kwargs):
@@ -53,7 +55,7 @@ def cb_add_comic():
             price = request.form['price']
 
             issue_name = name.lower()
-            table_title = issue_name.lstrip().rstrip().replace(' ', '_')+'_'+str(volume)
+            table_title = helper.convert_title(name, volume)
 
             # open a connection to the database
             # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
@@ -159,19 +161,47 @@ def cb_search():
         arc = request.form['arc']
 
 
-
-
         # search through to see if there are any
         # first find "name_volume" pairs in "comics"
-        if name != '' and volume != '':
-            with sqlite3.connect('comics_database.db') as conn:
-                cur = conn.cursor()
-                cur.execute(''' SELECT FROM {}'''.format(name+'_'+volume))
-                rows = cur.fetchall()
+
+        ''' if volume and num:
+            elif volume
+            elif num
+            elif name
+                - num  -> require name
+        '''
+
+        if volume != '':
+            try:
+                with sqlite3.connect('comics_database.db') as conn:
+                    cur = conn.cursor()
+                    table_title = helper.convert_title(name, volume)
+
+                    cur.execute(''' SELECT * FROM {}'''.format(table_title))
+                    rows = cur.fetchall()
+                    vol_data = []
+                    for entry in rows:
+                        print('There was an entry', entry)
+                        vol_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_title, entry[0]])
+            except Exception:
+                vol_data = []
+
+        # 'name' should maybe an elif attached to the volume
+        # if you hav a volume you are going to have the associated mae along with it
+        if name != '':
+            pass
+
+        ''' maybe the rest of this should go
+
+            open database
+            cycle through ALL the entries
+            if there is a match on any of these
+                - title
+                - arc
+        '''
 
 
 
-        print(name, num, volume, title, arc)
-    return render_template('cb_display.html', rows=rows)
+    return render_template('cb_display_search.html', vol_data=vol_data)
 
 # end

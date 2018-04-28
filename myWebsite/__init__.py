@@ -3,6 +3,7 @@ import sqlite3
 from functools import wraps
 import os
 
+import comicBase.helper as helper
 from comicBase.comicBase import cb_home, cb_login, cb_logout, cb_add_comic, cb_delete, cb_search
 
 app = Flask(__name__)
@@ -76,7 +77,7 @@ def cb_display_page():
     with sqlite3.connect('comics_database.db') as conn:
         cur = conn.cursor()
         # collect all table names
-        cur.execute('''SELECT titles from comics''')
+        cur.execute('''SELECT titles FROM comics''')
         tables = cur.fetchall()
 
         print('tables: ', tables)
@@ -84,28 +85,17 @@ def cb_display_page():
         rows = [] # list of entries
         # for each of the tables, get their info
         for table in tables:
-            name = table[0]
+            table_title = table[0]
 
             # get all the entries from table
-            cur.execute('''SELECT * from {}'''.format(name))
+            cur.execute('''SELECT * from {}'''.format(table_title))
             table_entries = cur.fetchall()
 
-            # title info storage
-            # ( _ delim issue name )_(volume number)
-
-            title_info = table[0].split('_')
-            volume = title_info[-1]  # the last one is the volume information
-            issue_list = title_info[0:-1] # issue name is everything else
-            issue = ''
-            # reconstruct the issue name
-            for word in issue_list:
-                if issue != '':
-                    issue += ' '
-                issue += word
-            issue = issue.title()   # then make first lettes capital
+            issue, volume = helper.revert_title(table_title)
 
             for entry in table_entries:
-                rows.append([issue, entry[1], volume, entry[2], entry[3], entry[4], name, entry[0]])
+                print('display: ', [issue, entry[1], volume, entry[2], entry[3], entry[4], table_title, entry[0]])
+                rows.append([issue, entry[1], volume, entry[2], entry[3], entry[4], table_title, entry[0]])
 
     # return render_template("cb_display.html")
     return render_template("cb_display.html",rows = rows)
@@ -115,7 +105,7 @@ def cb_delete_comic(table, id):
     print('here\'s the table: ', table, "  :", id)
     return cb_delete(table, id)
 
-@app.route('/search_comics', methods=['GET', 'POST'])
+@app.route('/search_comics', methods=['POST'])
 def cb_search_page():
     return cb_search()
 
