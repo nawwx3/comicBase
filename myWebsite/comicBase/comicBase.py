@@ -155,13 +155,62 @@ def cb_search():
         # first find "name_volume" pairs in "comics"
 
         ''' if volume and num:
-            elif volume
             elif num
             elif name
                 - num  -> require name
         '''
+        name_data = []
+        single_data = []
+        vol_data = []
+        group_data = []
+        title_data = []
+        arc_data = []
 
-        if volume != '':
+        if volume == '' and arc == '' and num == '' and title == '' and name != '':
+            try:
+                with sqlite3.connect('comics_database.db') as conn:
+                    cur = conn.cursor()
+
+                    # get all the titles from comics
+                    cur.execute(''' SELECT titles FROM comics ''')
+                    rows = cur.fetchall()
+                    same_titles = []
+                    # go through each of those titles and see if they match the issue looked for
+                    for entry in rows:
+                        issue, volume = helper.revert_title(entry[0])
+                        print('  ', issue, volume)
+                        if issue == name:
+                            same_titles.append(entry)
+
+                    # of the issues that are the same, keep all their stuff
+                    for title_name in same_titles:
+                        temp_name, temp_volume = helper.revert_title(title_name[0])
+                        cur.execute(''' SELECT * FROM {} '''.format(title_name[0]))
+                        info = cur.fetchall()
+                        for entry in info:
+                            name_data.append([temp_name, entry[1], temp_volume, entry[2], entry[3], entry[4], title_name, entry[0]])
+            except Exception as e:
+                print('\n {} \n'.format(e))
+
+
+        if volume != '' and name != '' and num != '':
+            # find the comic
+            try:
+                with sqlite3.connect('comics_database.db') as conn:
+                    cur = conn.cursor()
+                    table_title = helper.convert_title(name, volume)
+
+                    cur.execute(''' SELECT *
+                                    FROM {}
+                                    WHERE issue_number={}'''.format(table_title, num))
+                    rows = cur.fetchall()
+                    for entry in rows:
+                        print('There was an entry', entry)
+                        single_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_title, entry[0]])
+            except Exception:
+                pass
+
+        if volume != '' and name != '':
             try:
                 with sqlite3.connect('comics_database.db') as conn:
                     cur = conn.cursor()
@@ -169,16 +218,76 @@ def cb_search():
 
                     cur.execute(''' SELECT * FROM {}'''.format(table_title))
                     rows = cur.fetchall()
-                    vol_data = []
                     for entry in rows:
                         print('There was an entry', entry)
                         vol_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_title, entry[0]])
             except Exception:
-                vol_data = []
+                pass
+
+        if num != '' and name != '':
+            try:
+                with sqlite3.connect('comics_database.db') as conn:
+                    cur = conn.cursor()
+
+                    cur.execute(''' SELECT tables FROM comics ''')
+                    rows = cur.fetchall()
+                    for table_name in rows:
+
+                        cur.execute(''' SELECT *
+                                        FROM {}
+                                        WHERE issue_name={} AND issue_number={}'''
+                                        .format(table_name[0], name, num))
+
+                        entries = cur.fetchall()
+                        for entry in entries:
+                            group_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_name[0], entry[0]])
+            except Exception:
+                pass
 
         # 'name' should maybe an elif attached to the volume
         # if you hav a volume you are going to have the associated mae along with it
-        if name != '':
+
+
+        try:
+            with sqlite3.connect('comics_database.db') as conn:
+                cur = conn.cursor()
+
+                cur.execute(''' SELECT titles From comics ''')
+                title_names = cur.fetchall()
+
+                print('TITLE_NAMES: ', title_names)
+                for table_title in title_names:
+                    print(table_title[0])
+                    # for each table..
+
+                    name, volume = helper.revert_title(table_title[0])
+
+
+                    # find the titles that match
+                    if title != '':
+                        cur.execute(''' SELECT *
+                                        FROM {}
+                                        WHERE title={}'''.format(table_title[0], title))
+                        rows = cur.fetchall()
+                        for entry in rows:
+                            if entry[2] == title:
+                                print('There was an entry', entry)
+                                title_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_title[0], entry[0]])
+
+                    # and the arcs that match
+                    if arc != '':
+                        cur.execute(''' SELECT *
+                                        FROM {}
+                                        WHERE arc={}'''.format(table_title[0], arc))
+                        rows = cur.fetchall()
+                        for entry in rows:
+                            if entry[3] == arc:
+                                print('There was an entry', entry)
+                                arc_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_title[0], entry[0]])
+
+
+        except Exception as e:
+            print('\n {} \n'.format(e))
             pass
 
         ''' maybe the rest of this should go
@@ -192,7 +301,7 @@ def cb_search():
 
 
 
-    return render_template('cb_display_search.html', vol_data=vol_data)
+    return render_template('cb_display_search.html', name_data=name_data, single_data=single_data, group_data=group_data, vol_data=vol_data, title_data=title_data, arc_data=arc_data)
 
 @require_login
 def cb_display():

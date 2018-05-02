@@ -12,8 +12,8 @@ print('wonder_woman_1 dropped')
 db.execute('DROP TABLE superman_2')
 print('superman_2 dropped')
 
-db.execute('DROP TABLE green_lantern_2')
-print('green_lantern_2 dropped')
+db.execute('DROP TABLE action_comics_1')
+print('action_comics_1 dropped')
 
 db.execute('DROP TABLE IF exists comics')
 print('comics table dropped')

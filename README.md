@@ -56,3 +56,8 @@ CREATE TABLE if not exists table_title (
 As is show, if there is no table of that name it will be created. This also is unique to each comic_title, volume pair as each comic in that volume will create the same title name.  
 
 This "table_title" is then added into the previously mentioned "comics" table.
+
+### Inserting Comics
+
+
+### Deleting Comics

@@ -5,7 +5,6 @@ def convert_title(issue_name, volume):
 
 def revert_title(title_name):
     title_info = title_name.split('_')
-    print(title_info)
     volume = title_info[-1]  # the last one is the volume information
     issue_list = title_info[0:-1] # issue name is everything else
     issue = ''

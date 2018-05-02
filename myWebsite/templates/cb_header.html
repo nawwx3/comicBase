@@ -103,11 +103,17 @@
 
 
     <script>function validateForm() {
+      console.log("this is a test for onsublit validation")
       var name = document.forms["submit_form"]["issue_name"].value;
+      var num = document.forms["submit_form"]["issue_number"].value;
       var vol = document.forms["submit_form"]["volume"].value;
       if (vol != "" && name == "") {
-          window.alert("Issue Name also needs to be included with Volume.");
-          return false;
+        window.alert("Volume must be accompanied by Issue Name");
+        return false;
+      }
+      if (num != "" && name == "") {
+        window.alert("Issue Number must be accompanied by Issue Name");
+        return false;
       }
     }</script>
 
