@@ -13,15 +13,6 @@ def require_login(f):
         return f(*args, **kwargs)
     return decorated_function
 
-def require_logout(f):
-    @wraps(f)
-    def decorated_function(*args, **kwargs):
-        if session['logged_in']:
-            flash('You must be logged out to access that page', 'warn')
-            return redirect(url_for('cb_login_page', next=request.url))
-        return f(*args, **kwargs)
-    return decorated_function
-
 def cb_home():
     return render_template('cb_home.html')
 
@@ -150,7 +141,6 @@ def cb_delete(table, id):
     flash('Refresh page!', 'warn')
     return render_template('cb_display.html')
 
-
 @require_login
 def cb_search():
     if request.method == 'POST':
@@ -203,5 +193,36 @@ def cb_search():
 
 
     return render_template('cb_display_search.html', vol_data=vol_data)
+
+@require_login
+def cb_display():
+    # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
+    with sqlite3.connect('comics_database.db') as conn:
+        cur = conn.cursor()
+        # collect all table names
+        cur.execute('''SELECT titles FROM comics ORDER BY titles ASC''')
+        tables = cur.fetchall()
+
+        rows = [] # list of entries
+        # for each of the tables, get their info
+        for table in tables:
+            table_title = table[0]
+
+            # get all the entries from table
+            cur.execute('''SELECT * from {} ORDER BY issue_number ASC'''.format(table_title))
+            table_entries = cur.fetchall()
+
+            issue, volume = helper.revert_title(table_title)
+
+            for entry in table_entries:
+                rows.append([issue, entry[1], volume, entry[2], entry[3], entry[4], table_title, entry[0]])
+    # return render_template("cb_display.html")
+    return render_template("cb_display.html",rows = rows)
+
+
+
+
+
+
 
 # end
