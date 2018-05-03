@@ -2,7 +2,7 @@ from flask import Flask, render_template, session, request, flash, redirect, url
 from functools import wraps
 import sqlite3
 
-import comicBase.helper as helper
+import helper
 
 def require_login(f):
     @wraps(f)
@@ -223,16 +223,18 @@ def cb_search():
                         vol_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_title, entry[0]])
             except Exception:
                 pass
-
+        print('this is also happening')
         if num != '' and name != '':
+            print('made it inside the thing for name and number')
             try:
                 with sqlite3.connect(helper.database_location) as conn:
                     cur = conn.cursor()
 
-                    cur.execute(''' SELECT tables FROM comics ''')
+                    cur.execute(''' SELECT titles FROM comics ''')
                     rows = cur.fetchall()
                     for table_name in rows:
-
+                        temp_name, temp_volume = helper.revert_title(table_name[0])
+                        print('temp_name and temp_volume: ', temp_name, temp_volume)
                         cur.execute(''' SELECT *
                                         FROM {}
                                         WHERE issue_name={} AND issue_number={}
@@ -241,8 +243,9 @@ def cb_search():
 
                         entries = cur.fetchall()
                         for entry in entries:
-                            group_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_name[0], entry[0]])
-            except Exception:
+                            group_data.append([name, entry[1], temp_volume, entry[2], entry[3], entry[4], table_name[0], entry[0]])
+            except Exception as e:
+                print('\n {} \n'.format(e))
                 pass
 
         # 'name' should maybe an elif attached to the volume
