@@ -31,33 +31,55 @@ $ python3 __init__.py
 ~~~
 
 ## Storage
-This explains how the database is setup.  
-When `init_db.py` is run it makes this table:
 
-~~~ sql
-CREATE TABLE comics (
-  id integer primary key autoincrement,
-  titles varchar(50) not null unique
-);
-~~~
+### Setup
+When `init_db.py` is run
+- The following table is created (comes from "sql/tables.py"):
 
-Then when comics are added using the "Add Comics" page on the navbar, first the issue_name and the volume are pushed together to make a table name. This table is then created using this format:
-
-~~~ sql
-CREATE TABLE if not exists table_title (
+  ~~~ sql
+  CREATE TABLE comics (
     id integer primary key autoincrement,
-    issue_number varchar(5) not null,
+    titles varchar(50) not null unique
+  );
+  ~~~
+- Any entries in the "sql/entries.py" file are added
+
+### Inserting Comics
+When comics are added using the "Add" page on the navbar, first the issue_name and the volume are pushed together to make a table name. This table is then created using this format:
+
+~~~ sql
+CREATE TABLE if not exists issue_name_volume (
+    id integer primary key autoincrement,
+    issue_number integer not null,
     title varchar(100),
     arc varchar(50),
     price float
 );
 ~~~
 
-As is show, if there is no table of that name it will be created. This also is unique to each comic_title, volume pair as each comic in that volume will create the same title name.  
+As is shown, if there is no table of that name it will be created. This also is unique to each issue_name, volume pair as each comic in that volume will create the same title name.  
 
-This "table_title" is then added into the previously mentioned "comics" table.
-
-### Inserting Comics
-
+This "issue_name_volume" title is then added into the previously mentioned "comics" table.
 
 ### Deleting Comics
+When a comic is deleted, it first deletes the comic as usual. Then it checks to make sure the table it was deleted from is not empty. If it's not empty then it continues on. If it is empty, it drops the table then deletes the entry from the "comics" table.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+# end
