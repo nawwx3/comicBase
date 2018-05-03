@@ -1,5 +1,6 @@
 import sqlite3
 from flask import Flask
+import comicBase.helper as helper
 
 app = Flask(__name__)
 

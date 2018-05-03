@@ -185,7 +185,7 @@ def cb_search():
                     # of the issues that are the same, keep all their stuff
                     for title_name in same_titles:
                         temp_name, temp_volume = helper.revert_title(title_name[0])
-                        cur.execute(''' SELECT * FROM {} '''.format(title_name[0]))
+                        cur.execute(''' SELECT * FROM {} ORDER BY issue_number ASC'''.format(title_name[0]))
                         info = cur.fetchall()
                         for entry in info:
                             name_data.append([temp_name, entry[1], temp_volume, entry[2], entry[3], entry[4], title_name, entry[0]])
@@ -216,7 +216,7 @@ def cb_search():
                     cur = conn.cursor()
                     table_title = helper.convert_title(name, volume)
 
-                    cur.execute(''' SELECT * FROM {}'''.format(table_title))
+                    cur.execute(''' SELECT * FROM {} ORDER BY issue_number ASC'''.format(table_title))
                     rows = cur.fetchall()
                     for entry in rows:
                         print('There was an entry', entry)
@@ -235,7 +235,8 @@ def cb_search():
 
                         cur.execute(''' SELECT *
                                         FROM {}
-                                        WHERE issue_name={} AND issue_number={}'''
+                                        WHERE issue_name={} AND issue_number={}
+                                        ORDER BY issue_number ASC'''
                                         .format(table_name[0], name, num))
 
                         entries = cur.fetchall()
@@ -267,7 +268,8 @@ def cb_search():
                     if title != '':
                         cur.execute(''' SELECT *
                                         FROM {}
-                                        WHERE title={}'''.format(table_title[0], title))
+                                        WHERE title={}
+                                        ORDER BY issue_number ASC'''.format(table_title[0], title))
                         rows = cur.fetchall()
                         for entry in rows:
                             if entry[2] == title:
@@ -278,7 +280,8 @@ def cb_search():
                     if arc != '':
                         cur.execute(''' SELECT *
                                         FROM {}
-                                        WHERE arc={}'''.format(table_title[0], arc))
+                                        WHERE arc={}
+                                        ORDER BY issue_number ASC'''.format(table_title[0], arc))
                         rows = cur.fetchall()
                         for entry in rows:
                             if entry[3] == arc:
@@ -318,7 +321,7 @@ def cb_display():
             table_title = table[0]
 
             # get all the entries from table
-            cur.execute('''SELECT * from {} ORDER BY cast (issue_number as int)  ASC'''.format(table_title))
+            cur.execute('''SELECT * from {} ORDER BY issue_number ASC'''.format(table_title))
             table_entries = cur.fetchall()
 
             issue, volume = helper.revert_title(table_title)
