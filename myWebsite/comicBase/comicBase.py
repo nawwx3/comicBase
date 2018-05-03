@@ -2,7 +2,8 @@ from flask import Flask, render_template, session, request, flash, redirect, url
 from functools import wraps
 import sqlite3
 
-import helpe
+import helper
+# import comicBase.helper as helper
 
 def require_login(f):
     @wraps(f)
@@ -192,7 +193,6 @@ def cb_search():
             except Exception as e:
                 print('\n {} \n'.format(e))
 
-
         if volume != '' and name != '' and num != '':
             # find the comic
             try:
@@ -223,7 +223,7 @@ def cb_search():
                         vol_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_title, entry[0]])
             except Exception:
                 pass
-        print('this is also happening')
+
         if num != '' and name != '':
             print('made it inside the thing for name and number')
             try:
@@ -234,16 +234,18 @@ def cb_search():
                     rows = cur.fetchall()
                     for table_name in rows:
                         temp_name, temp_volume = helper.revert_title(table_name[0])
-                        print('temp_name and temp_volume: ', temp_name, temp_volume)
-                        cur.execute(''' SELECT *
-                                        FROM {}
-                                        WHERE issue_name={} AND issue_number={}
-                                        ORDER BY issue_number ASC'''
-                                        .format(table_name[0], name, num))
+                        if temp_name == name:
 
-                        entries = cur.fetchall()
-                        for entry in entries:
-                            group_data.append([name, entry[1], temp_volume, entry[2], entry[3], entry[4], table_name[0], entry[0]])
+                            print('temp_name and temp_volume: ', temp_name, temp_volume)
+                            cur.execute(''' SELECT *
+                                            FROM {}
+                                            WHERE issue_number={}
+                                            ORDER BY issue_number ASC'''
+                                            .format(table_name[0], name, num))
+
+                            entries = cur.fetchall()
+                            for entry in entries:
+                                group_data.append([name, entry[1], temp_volume, entry[2], entry[3], entry[4], table_name[0], entry[0]])
             except Exception as e:
                 print('\n {} \n'.format(e))
                 pass
