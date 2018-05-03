@@ -16,7 +16,7 @@
   <body class="cb_background">
 
     <!-- Navigation Bar -->
-    <div class="container-fluid">
+    <div style="margin-bottom: 10px" class="container-fluid">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
         <!-- is obviously the first part -->
@@ -32,10 +32,10 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('cb_home_page') }}">Home <span class="sr-only">(current)</span></a>
+                <a class="nav-link" href="{{ url_for('cb_display_page') }}">Display All</a>
               </li>
               <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('cb_add_comic_page') }}">Add Comic</a>
+                <a class="nav-link" href="{{ url_for('cb_add_comic_page') }}">Add</a>
               </li>
 
               <!-- The Dropdown -->
@@ -61,22 +61,32 @@
                     <div class="form-group">
                       <input type="text" class="form-control" name="title" placeholder="Title">
                     </div>
-
                     <button type="submit" class="btn btn-primary">Search</button>
-
                   </form>
                 </div>
               </li>
-
             </ul>
-            <form class="form-inline my-2 my-lg-0">
-              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-            </form>
+
+            <!-- right side navbar -->
+            <ul class="navbar-nav ml-auto">
+              <!-- <form class="form-inline my-2 my-lg-0">
+                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+              </form> -->
+              <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('cb_logout_page') }}">Logout</a>
+              </li>
+            </ul>
           </div>
 
         {% else %}
-          <a href="{{ url_for('cb_login_page') }}">Login</a>
+          <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <ul class="navbar-nav mr-auto">
+              <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('cb_login_page') }}">Login<span class="sr-only">(current)</span></a>
+              </li>
+            </ul>
+          </div>
         {% endif %}
 
       </nav>

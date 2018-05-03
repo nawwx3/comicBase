@@ -1,12 +1,11 @@
 {% extends "cb_header.html" %}
 {% block body %}
-  <div>
-    <form action="{{ url_for('cb_login_page') }}" method="post">
-      <h1>Login</h1>
-      <input class="login" type="text" placeholder="Username" name="login_username"/><br>
-      <input class="login" type="password" placeholder="Password" name="login_password"/><br>
-      <input class="button button2" type="submit" value="Submit"/>
-    </form>
-  </div>
+
+  <form action="{{ url_for('cb_login_page') }}" method="post">
+    <h1>Login</h1>
+    <input class="login" value="f" type="text" placeholder="Username" name="login_username"/><br>
+    <input class="login" value="f" type="password" placeholder="Password" name="login_password"/><br>
+    <input class="button button-login" type="submit" value="Submit"/>
+  </form>
 
 {% endblock %}

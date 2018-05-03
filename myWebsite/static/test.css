@@ -1,3 +1,80 @@
 .cb_background {
   background-color: lightblue;
 }
+
+.flashes {
+  padding: 10px 20px;  /* vertical horizontal */
+  background-color: #66ffb3;  /* 70% */
+  border-style: solid;
+  border-width: 2px;
+  border-color: #00e673;   /* 45% */
+  color: black;
+  font-size: 18px;
+  border-radius: 8px;
+  margin-bottom: 10px;
+}
+
+.error {
+  background-color: #ff6666;
+  border-color: #e60000;
+}
+
+.warn {
+  background-color: #ffff66;
+  border-color: #e6e600;
+}
+
+.login {
+  margin-bottom: 5px;
+  height: 40px;
+  width:200px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+.centered {
+    margin-left: auto;
+    margin-right: auto;
+    text-align: center;
+}
+
+.button {
+    background-color: #4CAF50; /* Green */
+    border: none;
+    color: white;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    cursor: pointer;
+    width: 160px;
+    height: 35px;
+}
+.button-login {
+  background-color: #008CBA;
+  border-radius: 8px;
+}
+
+.button-delete {
+  width: 25px;
+  height: 25px;
+  border-radius: 8px;
+  background-color: red;
+  text-align: center;
+}
+
+
+
+form {
+  text-align: center;
+}
+
+.hang-right {
+  float: right;
+}
+
+table {
+    font-family: arial, sans-serif;
+    border-collapse: collapse;
+    width: 100%;
+}

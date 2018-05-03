@@ -1,3 +1,7 @@
+# database_location = '/var/www/myWebsite/myWebsite/comics_database.db'
+database_location = 'comics_database.db'
+
+
 def convert_title(issue_name, volume):
     issue_name = issue_name.lower()
     table_title = issue_name.lstrip().rstrip().replace(' ', '_')+'_'+str(volume)

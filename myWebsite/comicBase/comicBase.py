@@ -50,7 +50,7 @@ def cb_add_comic():
 
             # open a connection to the database
             # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
-            with sqlite3.connect('comics_database.db') as conn:
+            with sqlite3.connect(helper.database_location) as conn:
                 print('is it connecting')
                 cur = conn.cursor()
 
@@ -103,7 +103,7 @@ def cb_delete(table, id):
 
     try:
         # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
-        with sqlite3.connect('comics_database.db') as conn:
+        with sqlite3.connect(helper.database_location) as conn:
             print('\n')
             cur = conn.cursor()
 
@@ -168,7 +168,7 @@ def cb_search():
 
         if volume == '' and arc == '' and num == '' and title == '' and name != '':
             try:
-                with sqlite3.connect('comics_database.db') as conn:
+                with sqlite3.connect(helper.database_location) as conn:
                     cur = conn.cursor()
 
                     # get all the titles from comics
@@ -196,7 +196,7 @@ def cb_search():
         if volume != '' and name != '' and num != '':
             # find the comic
             try:
-                with sqlite3.connect('comics_database.db') as conn:
+                with sqlite3.connect(helper.database_location) as conn:
                     cur = conn.cursor()
                     table_title = helper.convert_title(name, volume)
 
@@ -212,7 +212,7 @@ def cb_search():
 
         if volume != '' and name != '':
             try:
-                with sqlite3.connect('comics_database.db') as conn:
+                with sqlite3.connect(helper.database_location) as conn:
                     cur = conn.cursor()
                     table_title = helper.convert_title(name, volume)
 
@@ -226,7 +226,7 @@ def cb_search():
 
         if num != '' and name != '':
             try:
-                with sqlite3.connect('comics_database.db') as conn:
+                with sqlite3.connect(helper.database_location) as conn:
                     cur = conn.cursor()
 
                     cur.execute(''' SELECT tables FROM comics ''')
@@ -249,7 +249,7 @@ def cb_search():
 
 
         try:
-            with sqlite3.connect('comics_database.db') as conn:
+            with sqlite3.connect(helper.database_location) as conn:
                 cur = conn.cursor()
 
                 cur.execute(''' SELECT titles From comics ''')
@@ -306,7 +306,7 @@ def cb_search():
 @require_login
 def cb_display():
     # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
-    with sqlite3.connect('comics_database.db') as conn:
+    with sqlite3.connect(helper.database_location) as conn:
         cur = conn.cursor()
         # collect all table names
         cur.execute('''SELECT titles FROM comics ORDER BY titles ASC''')
@@ -318,7 +318,7 @@ def cb_display():
             table_title = table[0]
 
             # get all the entries from table
-            cur.execute('''SELECT * from {} ORDER BY issue_number ASC'''.format(table_title))
+            cur.execute('''SELECT * from {} ORDER BY cast (issue_number as int)  ASC'''.format(table_title))
             table_entries = cur.fetchall()
 
             issue, volume = helper.revert_title(table_title)
