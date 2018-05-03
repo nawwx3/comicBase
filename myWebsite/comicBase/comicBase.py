@@ -2,8 +2,8 @@ from flask import Flask, render_template, session, request, flash, redirect, url
 from functools import wraps
 import sqlite3
 
-import helper
-# import comicBase.helper as helper
+# import helper
+import comicBase.helper as helper
 
 def require_login(f):
     @wraps(f)

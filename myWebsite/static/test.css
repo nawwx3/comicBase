@@ -63,7 +63,9 @@
   text-align: center;
 }
 
-
+.partial {
+  width: 90%;
+}
 
 form {
   text-align: center;
