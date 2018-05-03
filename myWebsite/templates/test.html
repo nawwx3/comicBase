@@ -16,7 +16,7 @@
   <body class="cb_background">
 
     <!-- Navigation Bar -->
-    <div style="margin-bottom: 10px" class="container-fluid">
+    <div class="container-fluid">
       <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
 
         <!-- is obviously the first part -->
@@ -32,61 +32,54 @@
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
               <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('cb_display_page') }}">Display All</a>
+                <a class="nav-link" href="{{ url_for('cb_home_page') }}">Home <span class="sr-only">(current)</span></a>
               </li>
-              <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('cb_add_comic_page') }}">Add</a>
+              <li class="nav-item"> 
+                <a class="nav-link" href="#">Link</a>
               </li>
 
               <!-- The Dropdown -->
-              <li class="nav-item dropdown active">
+              <li class="nav-item dropdown">
                 <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   Search
                 </a>
-
                 <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <form class="px-3 py" name="submit_form" action="{{ url_for('cb_search_page') }}" onsubmit="return validateForm()" method="POST">
+                  <form class="px-3 py">
                     <div class="form-group">
-                      <input type="text" class="form-control" name="issue_name" placeholder="Issue Name">
+                      <input type="text" class="form-control" id="issue_name" placeholder="Issue Name">
                     </div>
                     <div class="form-group">
-                      <input type="text" class="form-control" name="issue_number" placeholder="Issue Number">
+                      <input type="text" class="form-control" id="issue_number" placeholder="Issue Number">
                     </div>
                     <div class="form-group">
-                      <input type="text" class="form-control" name="volume" placeholder="Volume">
+                      <input type="text" class="form-control" id="volume" placeholder="Volume">
                     </div>
                     <div class="form-group">
-                      <input type="text" class="form-control" name="arc" placeholder="Arc">
+                      <input type="text" class="form-control" id="arc" placeholder="Arc">
                     </div>
                     <div class="form-group">
-                      <input type="text" class="form-control" name="title" placeholder="Title">
+                      <input type="text" class="form-control" id="title" placeholder="Title">
                     </div>
+
                     <button type="submit" class="btn btn-primary">Search</button>
+
                   </form>
                 </div>
               </li>
-            </ul>
 
-            <!-- right side navbar -->
-            <ul class="navbar-nav ml-auto">
-              <!-- <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-              </form> -->
-              <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('cb_logout_page') }}">Logout</a>
+              <!-- disabled item -->
+              <li class="nav-item">
+                <a class="nav-link disabled" href="#">Disabled</a>
               </li>
             </ul>
+            <form class="form-inline my-2 my-lg-0">
+              <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
+              <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
+            </form>
           </div>
 
         {% else %}
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('cb_login_page') }}">Login<span class="sr-only">(current)</span></a>
-              </li>
-            </ul>
-          </div>
+          <a href="{{ url_for('cb_login_page') }}">Login</a>
         {% endif %}
 
       </nav>
@@ -110,22 +103,6 @@
     </div>
 
     {% block body %} {% endblock %}
-
-
-    <script>function validateForm() {
-      console.log("this is a test for onsublit validation")
-      var name = document.forms["submit_form"]["issue_name"].value;
-      var num = document.forms["submit_form"]["issue_number"].value;
-      var vol = document.forms["submit_form"]["volume"].value;
-      if (vol != "" && name == "") {
-        window.alert("Volume must be accompanied by Issue Name");
-        return false;
-      }
-      if (num != "" && name == "") {
-        window.alert("Issue Number must be accompanied by Issue Name");
-        return false;
-      }
-    }</script>
 
   </body>
 </html>

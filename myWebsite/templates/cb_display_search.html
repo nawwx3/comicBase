@@ -1,0 +1,190 @@
+{% extends "cb_header.html" %}
+{% block body %}
+<div class="container">
+
+    {% if name_data != [] %}
+      <h2>Name Info</h2>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <th>Issue Name</th>
+          <th>Issue Number</th>
+          <th>Volume</th>
+          <th>Title</th>
+          <th>Arc</th>
+          <th>Price</th>
+          <th></th>
+        </thead>
+        {% for row in name_data %}
+          <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>
+              <a class="button button-delete" href="{{ url_for('cb_delete_comic', table=row[6], id=row[7]) }}">x</a>
+            </td>
+          </tr>
+        {% endfor %}
+
+      </table>
+      <br>
+    {% endif %}
+
+    {% if single_data != [] %}
+      <h2>Comic Info</h2>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <th>Issue Name</th>
+          <th>Issue Number</th>
+          <th>Volume</th>
+          <th>Title</th>
+          <th>Arc</th>
+          <th>Price</th>
+          <th></th>
+        </thead>
+        {% for row in single_data %}
+          <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>
+              <a class="button button-delete" href="{{ url_for('cb_delete_comic', table=row[6], id=row[7]) }}">x</a>
+            </td>
+          </tr>
+        {% endfor %}
+
+      </table>
+      <br>
+    {% endif %}
+
+
+    {% if vol_data != [] %}
+      <h2>Volume Info</h2>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <th>Issue Name</th>
+          <th>Issue Number</th>
+          <th>Volume</th>
+          <th>Title</th>
+          <th>Arc</th>
+          <th>Price</th>
+          <th></th>
+        </thead>
+        {% for row in vol_data %}
+          <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>
+              <a class="button button-delete" href="{{ url_for('cb_delete_comic', table=row[6], id=row[7]) }}">x</a>
+            </td>
+          </tr>
+        {% endfor %}
+
+      </table>
+      <br>
+    {% endif %}
+
+    {% if group_data != [] %}
+      <h2>Group Info</h2>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <th>Issue Name</th>
+          <th>Issue Number</th>
+          <th>Volume</th>
+          <th>Title</th>
+          <th>Arc</th>
+          <th>Price</th>
+          <th></th>
+        </thead>
+        {% for row in group_data %}
+          <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>
+              <a class="button button-delete" href="{{ url_for('cb_delete_comic', table=row[6], id=row[7]) }}">x</a>
+            </td>
+          </tr>
+        {% endfor %}
+
+      </table>
+      <br>
+    {% endif %}
+
+    {% if title_data != [] %}
+      <h2>Title Info</h2>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <th>Issue Name</th>
+          <th>Issue Number</th>
+          <th>Volume</th>
+          <th>Title</th>
+          <th>Arc</th>
+          <th>Price</th>
+          <th></th>
+        </thead>
+        {% for row in title_data %}
+          <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>
+              <a class="button button-delete" href="{{ url_for('cb_delete_comic', table=row[6], id=row[7]) }}">x</a>
+            </td>
+          </tr>
+        {% endfor %}
+
+      </table>
+      <br>
+    {% endif %}
+
+
+    {% if arc_data != [] %}
+      <h2>Arc Info</h2>
+      <table class="table table-striped">
+        <thead class="thead-dark">
+          <th>Issue Name</th>
+          <th>Issue Number</th>
+          <th>Volume</th>
+          <th>Title</th>
+          <th>Arc</th>
+          <th>Price</th>
+          <th></th>
+        </thead>
+        {% for row in arc_data %}
+          <tr>
+            <td>{{ row[0] }}</td>
+            <td>{{ row[1] }}</td>
+            <td>{{ row[2] }}</td>
+            <td>{{ row[3] }}</td>
+            <td>{{ row[4] }}</td>
+            <td>{{ row[5] }}</td>
+            <td>
+              <a class="button button-delete" href="{{ url_for('cb_delete_comic', table=row[6], id=row[7]) }}">x</a>
+            </td>
+          </tr>
+        {% endfor %}
+
+      </table>
+    {% endif %}
+
+
+
+  </div>
+
+{% endblock %}

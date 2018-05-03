@@ -2,36 +2,46 @@
 {% block body %}
 <div class="container">
 
+  <br>
+  <table class="table table-striped">
+    <thead class="thead-dark">
+      <tr>
+        <th>Issue Name</th>
+        <th>Issue Number</th>
+        <th>Volume</th>
+        <th>Title</th>
+        <th>Arc</th>
+        <th>Price</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
 
-
-  <div class="jumbotron">
-    <h2>Comics Display</h2>
-    <table id="table" border = 1>
-      <thread>
-        <td class="farts">Issue Name</td>
-        <td class="farts">Issue Number</td>
-        <td class="farts">Volume</td>
-        <td class="farts">Title</td>
-        <td class="farts">Arc</td>
-        <td class="farts">Price</td>
-        <td class="farts"></td>
-      </thead>
-      {% for row in rows %}
+    {% for row in rows %}
         <tr>
           <td>{{ row[0] }}</td>
           <td>{{ row[1] }}</td>
           <td>{{ row[2] }}</td>
           <td>{{ row[3] }}</td>
           <td>{{ row[4] }}</td>
-          <td>{{ row[5] }}</td>
+
+          <script>
+            function f() {
+              document.write(   {{row[5]}}.toFixed(2)  );
+              // return {{row[5]}}.toFixed(2);
+              return ;
+            }
+          </script>
+          <td> <script>f() </script> </td>
           <td>
-            <a class="button button3" href="{{ url_for('cb_delete_comic', table=row[6], id=row[7]) }}">x</a>
+            <a class="button button-delete" href="{{ url_for('cb_delete_comic', table=row[6], id=row[7]) }}">x</a>
           </td>
         </tr>
-      {% endfor %}
+    {% endfor %}
+  </tbody>
 
-    </table>
-  </div>
+  </table>
+
 </div>
 
 {% endblock %}
