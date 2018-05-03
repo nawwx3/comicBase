@@ -233,6 +233,7 @@ def cb_search():
                     cur.execute(''' SELECT titles FROM comics ''')
                     rows = cur.fetchall()
                     for table_name in rows:
+                        print('table_name: ', table_name[0])
                         temp_name, temp_volume = helper.revert_title(table_name[0])
                         if temp_name == name:
 
@@ -241,7 +242,7 @@ def cb_search():
                                             FROM {}
                                             WHERE issue_number={}
                                             ORDER BY issue_number ASC'''
-                                            .format(table_name[0], name, num))
+                                            .format(table_name[0], num))
 
                             entries = cur.fetchall()
                             for entry in entries:
