@@ -1,13 +1,8 @@
-#!/usr/bin/env python3
 from flask import Flask, render_template, session, request, flash, redirect, url_for, g
 from functools import wraps
 import sqlite3
 
-
-
-
-#import var.www.myWebsite.myWebsite.comicBase.helper as helper
-import helper
+import comicBase.helper as helper
 
 def require_login(f):
     @wraps(f)
@@ -136,8 +131,11 @@ def cb_delete(table, id):
 
     except Exception as e:
         print('error: ', e)
+        conn.rollback()
+        conn.close()
         flash('Error in delete operation', 'error')
     finally:
+        conn.close()
         return redirect(url_for('cb_display_page'))
 
     flash('Refresh page!', 'warn')
@@ -179,8 +177,8 @@ def cb_search():
                     same_titles = []
                     # go through each of those titles and see if they match the issue looked for
                     for entry in rows:
-                        issue, volume = helper.revert_title(entry[0])
-                        print('  ', issue, volume)
+                        issue, temp_volume = helper.revert_title(entry[0])
+                        print('  ', issue, temp_volume)
                         if issue == name:
                             same_titles.append(entry)
 
@@ -214,7 +212,6 @@ def cb_search():
 
         if volume != '' and name != '':
             try:
-                print('volume: |{}|'.format(volume))
                 with sqlite3.connect(helper.database_location) as conn:
                     cur = conn.cursor()
                     table_title = helper.convert_title(name, volume)
