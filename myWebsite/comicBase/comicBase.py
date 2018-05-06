@@ -255,49 +255,53 @@ def cb_search():
         # if you hav a volume you are going to have the associated mae along with it
 
 
-        try:
-            with sqlite3.connect(helper.database_location) as conn:
-                cur = conn.cursor()
+        if title != '' or arc != '':
+            try:
+                with sqlite3.connect(helper.database_location) as conn:
+                    cur = conn.cursor()
 
-                cur.execute(''' SELECT titles From comics ''')
-                title_names = cur.fetchall()
+                    cur.execute(''' SELECT titles From comics ''')
+                    title_names = cur.fetchall()
 
-                print('TITLE_NAMES: ', title_names)
-                for table_title in title_names:
-                    print(table_title[0])
-                    # for each table..
+                    print('TITLE_NAMES: ', title_names)
+                    for table_title in title_names:
+                        print(table_title[0])
+                        # for each table..
 
-                    name, volume = helper.revert_title(table_title[0])
+                        name, volume = helper.revert_title(table_title[0])
 
 
-                    # find the titles that match
-                    if title != '':
-                        cur.execute(''' SELECT *
+                        # find the titles that match
+                        if title != '':
+                            query = ''' SELECT *
                                         FROM {}
-                                        WHERE title={}
-                                        ORDER BY issue_number ASC'''.format(table_title[0], title))
-                        rows = cur.fetchall()
-                        for entry in rows:
-                            if entry[2] == title:
-                                print('There was an entry', entry)
-                                title_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_title[0], entry[0]])
+                                        WHERE title=?
+                                        ORDER BY issue_number ASC'''.format(table_title[0])
+                            cur.execute(query, (title,))
+                            print('\n\nthis is the location of the test')
+                            rows = cur.fetchall()
+                            print(rows)
+                            for entry in rows:
+                                if entry[2] == title:
+                                    print('There was an entry', entry)
+                                    title_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_title[0], entry[0]])
 
-                    # and the arcs that match
-                    if arc != '':
-                        cur.execute(''' SELECT *
+                        # and the arcs that match
+                        if arc != '':
+                            query = ''' SELECT *
                                         FROM {}
-                                        WHERE arc={}
-                                        ORDER BY issue_number ASC'''.format(table_title[0], arc))
-                        rows = cur.fetchall()
-                        for entry in rows:
-                            if entry[3] == arc:
-                                print('There was an entry', entry)
-                                arc_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_title[0], entry[0]])
+                                        WHERE arc=?
+                                        ORDER BY issue_number ASC'''.format(table_title[0])
+                            cur.execute(query, (arc,))
+                            rows = cur.fetchall()
+                            for entry in rows:
+                                if entry[3] == arc:
+                                    print('There was an entry', entry)
+                                    arc_data.append([name, entry[1], volume, entry[2], entry[3], entry[4], table_title[0], entry[0]])
 
 
-        except Exception as e:
-            print('\n {} \n'.format(e))
-            pass
+            except Exception as e:
+                print('\n {} \n'.format(e))
 
         ''' maybe the rest of this should go
 

@@ -112,7 +112,7 @@ INSERT INTO teen_titans_rebirth VALUES("126", "02", "Damian Knows Best Part 2", 
 INSERT INTO teen_titans_rebirth VALUES("127", "05", "Damian Knows Best Part 5", "", "$1.79");
 INSERT INTO action_comics_rebirth VALUES("128", "975", "Superman: Reborn Part 2: The Man in the Purple Hat", "Superman: Reborn", "$1.99");
 INSERT INTO action_comics_rebirth VALUES("129", "976", "Superman: Reborn Part 4", "Superman: Reborn", "$1.49");
-INSERT INTO superman_rebirth VALUES("130", "18", "Superman: Reborn Part 1", "Superman: Reborn ", "$1.49");
+INSERT INTO superman_rebirth VALUES("130", "18", "Superman: Reborn Part 1", "Superman: Reborn", "$1.49");
 INSERT INTO superman_rebirth VALUES("131", "19", "Superman: Reborn Part 3: Don't Pass Go", "Superman: Reborn", "$1.49");
 INSERT INTO batgirl_rebirth VALUES("132", "09", "Son of Penguin Part 3", "", "$1.79");
 INSERT INTO teen_titans_rebirth VALUES("133", "06", "The Rise of Aqualad Part 1", "", "$1.79");
