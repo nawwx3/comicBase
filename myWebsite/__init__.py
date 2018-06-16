@@ -4,7 +4,7 @@ from functools import wraps
 import os
 
 import comicBase.helper as helper
-from comicBase.comicBase import cb_home, cb_login, cb_logout, cb_add_comic, cb_delete, cb_display, cb_search
+from comicBase.comicBase import cb_home, cb_login, cb_logout, cb_add_comic, cb_delete, cb_display, cb_search, cb_unified_search
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -82,6 +82,10 @@ def cb_delete_comic(table, id):
 @app.route('/search_comics', methods=['POST'])
 def cb_search_page():
     return cb_search()
+
+@app.route('/unified_search', methods=['POST'])
+def cb_unified():
+    return cb_unified_search()
 
 if __name__ == '__main__':
     app.run()

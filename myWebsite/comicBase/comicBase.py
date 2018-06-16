@@ -341,6 +341,86 @@ def cb_display():
     # return render_template("cb_display.html")
     return render_template("cb_display.html",rows = rows)
 
+def cb_unified_search():
+
+    ''' open database
+        cycle through all entries
+            for entry check if match to category
+                if match add to array
+        output
+    '''
+    if request.method == 'POST':
+        search_data = request.form['search_bar']
+        search_nums = []
+        search_words = ''
+        parts = search_data.split(' ')
+        for part in parts:
+            if part.isdigit():
+                search_nums.append(int(part))
+            search_words = search_words + part.lower()
+
+        print('SEARCH NUMS --- ', search_nums)
+        print('SEARCH WORDS --- ', search_words)
+
+
+        # open database
+        with sqlite3.connect(helper.database_location) as conn:
+            cur = conn.cursor()
+            cur.execute(''' SELECT * from comics ''')
+            tables = cur.fetchall()
+
+            name_data = []
+            single_data = []
+            vol_data = []
+            group_data = []
+            title_data = []
+            arc_data = []
+
+            for table in tables:
+                name, volume = helper.revert_title(table[1])
+                cur.execute(''' SELECT * from {} '''.format(table[1]))
+                rows = cur.fetchall()
+
+                for row in rows:
+                    # if individual comics match issue number
+                    if row[1] in search_nums:
+                        print('matched 1')
+                        group_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
+
+                    # if matched issue name
+                    if name.replace(' ', '').lower() in search_words:
+                        print('matched 2')
+                        name_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
+
+                    # if matched volume name
+                    if volume.lower() in search_words:
+                        print('matched 3')
+                        volume_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
+
+                    # if matched arc name
+                    if search_words in row[3].lower() and row[3] != '':
+                        print('matched 4')
+                        print('--{}-- v --{}--'.format(row[3], search_words))
+                        arc_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
+
+                    # if matches part of title
+                    if search_words in row[2].lower() :
+                        print('matched 5')
+                        title_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
+
+
+
+        return render_template('cb_display_search.html', name_data=name_data, single_data=single_data, group_data=group_data, vol_data=vol_data, title_data=title_data, arc_data=arc_data)
+
+
+
+
+
+
+
+
+
+
 
 
 

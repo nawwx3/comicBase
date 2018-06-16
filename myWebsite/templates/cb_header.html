@@ -37,42 +37,17 @@
               <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('cb_add_comic_page') }}">Add</a>
               </li>
-
-              <!-- The Dropdown -->
-              <li class="nav-item dropdown active">
-                <a class="nav-link dropdown-toggle" href="#" id="navbarDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  Search
-                </a>
-
-                <div class="dropdown-menu" aria-labelledby="navbarDropdown">
-                  <form class="px-3 py" name="submit_form" action="{{ url_for('cb_search_page') }}" onsubmit="return validateForm()" method="POST">
-                    <div class="form-group">
-                      <input type="text" class="form-control" name="issue_name" placeholder="Issue Name">
-                    </div>
-                    <div class="form-group">
-                      <input type="text" class="form-control" name="issue_number" placeholder="Issue Number">
-                    </div>
-                    <div class="form-group">
-                      <input type="text" class="form-control" name="volume" placeholder="Volume">
-                    </div>
-                    <div class="form-group">
-                      <input type="text" class="form-control" name="arc" placeholder="Arc">
-                    </div>
-                    <div class="form-group">
-                      <input type="text" class="form-control" name="title" placeholder="Title">
-                    </div>
-                    <button type="submit" class="btn btn-primary">Search</button>
-                  </form>
-                </div>
-              </li>
+              <!-- search bar -->
+              <form class="form-inline my-2 my-lg-0" action="{{ url_for('cb_unified') }}" method="POST">
+                  <input type="text" class="form-control" name="search_bar" placeholder="Search">
+                  <!-- <div class="input-group-append">
+                    <button class="btn btn-outline-secondary" type="submit">Search</button>
+                  </div> -->
+              </form>
             </ul>
 
             <!-- right side navbar -->
             <ul class="navbar-nav ml-auto">
-              <!-- <form class="form-inline my-2 my-lg-0">
-                <input class="form-control mr-sm-2" type="search" placeholder="Search" aria-label="Search">
-                <button class="btn btn-outline-success my-2 my-sm-0" type="submit">Search</button>
-              </form> -->
               <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('cb_logout_page') }}">Logout</a>
               </li>
