@@ -71,9 +71,8 @@ When a comic is deleted, it first deletes the comic from it's assigned table. Th
 The page displays all the comics in the database. It starts off the top of the "comics" table printing the info from each table grabbed and moves onto the next one till it reaches the bottom if the "comics" table.
 
 ### Add
-This page pulls up an input form that then adds the info into the database.
-
-Form checking will be added.
+This page pulls up an input form that then adds the info into the database when submitted.  
+Form validation is included to make sure at least an Issue Name, Issue Number, and Volume are included.
 
 
 ### Search Bar
