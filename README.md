@@ -9,8 +9,8 @@ The second part of this website is a comic book database that I have developed m
 
 
 
-append '/comicBase' to the end of the domain to access this  
-eventually there will be a "playground" setting so other users can look at it.
+Append '/comicBase' to the end of the domain to access this  
+Eventually there will be a "playground" setting so other users can look at it.
 
 ## Info
 comicBase is a comic book database I have developed to cut down on the number of same issues I am buying while in store. Also because it I thought it would be fun to make. It is running on an Amazon lightsail instance running Ubuntu 16.04.  
@@ -20,6 +20,7 @@ I am using these to run comicBase:
 - sqlite3
 
 ## Setup
+This would only happen when running on localhost
 - initialize the database (only do this once)
 ~~~ shell
 $ python3 init_db.py
@@ -62,23 +63,22 @@ As is shown, if there is no table of that name it will be created. This also is 
 This "issue_name_volume" title is then added into the previously mentioned "comics" table.
 
 ### Deleting Comics
-When a comic is deleted, it first deletes the comic as usual. Then it checks to make sure the table it was deleted from is not empty. If it's not empty then it continues on. If it is empty, it drops the table then deletes the entry from the "comics" table.
+When a comic is deleted, it first deletes the comic from it's assigned table. Then it checks to make sure the table it was deleted from is not empty. If it's not empty then it continues on. If it is empty, it drops the table then deletes the entry from the "comics" table.
 
 
+# Page Tabs
+### Display All
+The page displays all the comics in the database. It starts off the top of the "comics" table printing the info from each table grabbed and moves onto the next one till it reaches the bottom if the "comics" table.
+
+### Add
+This page pulls up an input form that then adds the info into the database.
+
+Form checking will be added.
 
 
-
-
-
-
-
-
-
-
-
-
-
-
+### Search Bar
+First version of this had form checking. Now it is just an input box.
+Searches through all info and finds like terms in any of the table entries.
 
 
 
