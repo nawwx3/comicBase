@@ -1,5 +1,8 @@
+# works on server
 # database_location = '/var/www/myWebsite/myWebsite/comics_database.db'
-database_location = 'comics_database.db'
+
+# works at home
+# database_location = 'comics_database.db'
 
 
 def convert_title(issue_name, volume):

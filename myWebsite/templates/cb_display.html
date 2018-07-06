@@ -25,15 +25,14 @@
           <td>{{ row[3] }}</td>
           <td>{{ row[4] }}</td>
 
-
-          <!-- <td> <script>f() </script> </td>
           <script>
             function f() {
               document.write(   {{row[5]}}.toFixed(2)  );
               // return {{row[5]}}.toFixed(2);
               return ;
-            } -->
-          <!-- </script> -->
+            }
+          </script>
+          <td> <script>f() </script> </td>
           <td>
             <a class="button button-delete" href="{{ url_for('cb_delete_comic', table=row[6], id=row[7]) }}">x</a>
           </td>
