@@ -3,10 +3,10 @@ from functools import wraps
 import sqlite3
 
 # works on server
-# import helper
+import helper
 
 # works at home
-import comicBase.helper as helper
+# import comicBase.helper as helper
 
 def require_login(f):
     @wraps(f)
