@@ -3,10 +3,10 @@ from functools import wraps
 import sqlite3
 
 # works on server
-# import helper
+import helper
 
 # works at home
-import comicBase.helper as helper
+# import comicBase.helper as helper
 
 def require_login(f):
     @wraps(f)
@@ -106,7 +106,6 @@ def cb_add_comic():
 def cb_delete(table, id):
 
     try:
-        # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
         with sqlite3.connect(helper.database_location) as conn:
             print('\n')
             cur = conn.cursor()
@@ -157,7 +156,6 @@ def cb_display():
         # for each of the tables, get their info
         for table in tables:
             table_title = table[0]
-
             # get all the entries from table
             cur.execute('''SELECT * from {} ORDER BY issue_number ASC'''.format(table_title))
             table_entries = cur.fetchall()
@@ -165,7 +163,11 @@ def cb_display():
             issue, volume = helper.revert_title(table_title)
 
             for entry in table_entries:
-                rows.append([issue, entry[1], volume, entry[2], entry[3], entry[4], table_title, entry[0]])
+                if table_title in ["Annual_Rebirth"]:
+                    rows.append([issue+' '+entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], table_title, entry[0]])
+                else:
+                    #         issue, number, volume, title, arc, price, table_title, id
+                    rows.append([issue, entry[1], volume, entry[2], entry[3], entry[4], table_title, entry[0]])
     # return render_template("cb_display.html")
     return render_template("cb_display.html",rows = rows)
 
@@ -188,10 +190,6 @@ def cb_unified_search():
                 search_nums.append(int(part))
             search_words = search_words + part.lower()
 
-        print('SEARCH NUMS --- ', search_nums)
-        print('SEARCH WORDS --- ', search_words)
-
-
         # open database
         with sqlite3.connect(helper.database_location) as conn:
             cur = conn.cursor()
@@ -213,31 +211,23 @@ def cb_unified_search():
                 for row in rows:
                     # if individual comics match issue number
                     if row[1] in search_nums:
-                        print('matched 1')
                         group_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
 
                     # if matched issue name
                     if name.replace(' ', '').lower() in search_words:
-                        print('matched 2')
                         name_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
 
                     # if matched volume name
                     if volume.lower() in search_words:
-                        print('matched 3')
                         volume_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
 
                     # if matched arc name
                     if search_words in row[3].lower() and row[3] != '':
-                        print('matched 4')
-                        print('--{}-- v --{}--'.format(row[3], search_words))
                         arc_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
 
                     # if matches part of title
                     if search_words in row[2].lower() :
-                        print('matched 5')
                         title_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
-
-
 
         return render_template('cb_display_search.html', name_data=name_data, single_data=single_data, group_data=group_data, vol_data=vol_data, title_data=title_data, arc_data=arc_data)
 
@@ -250,22 +240,29 @@ def cb_display_tables():
         cur.execute(''' SELECT titles FROM comics ''')
         title_names = cur.fetchall()
 
-    return render_template('cb_display_tables.html', title_names=title_names)
+        rows = []
+        for title in title_names:
+            issue, volume = helper.revert_title(title[0])
+            rows.append((issue, volume))
+
+    return render_template('cb_display_tables.html', rows=rows)
 
 @require_login
-def cb_display_table_info(table_name):
+def cb_display_table_info(issue, volume):
     with sqlite3.connect(helper.database_location) as conn:
         cur = conn.cursor()
 
-        # get all the titles from comics
-        cur.execute(''' SELECT * FROM {} '''.format(table_name))
-        rows = cur.fetchall()
+        table_name = helper.convert_title(issue, volume)
 
-        issue, volume = helper.revert_title(table_name)
+        # get all the titles from comics
+        cur.execute(''' SELECT * FROM {} order by issue_number ASC'''.format(table_name))
+        rows = cur.fetchall()
 
     return render_template('cb_display_table_info.html', rows=rows, issue=issue, volume=volume)
 
-
+@require_login
+def cb_volume_info():
+    return render_template('cb_volume_info_page.html')
 
 
 

@@ -5,7 +5,7 @@ import os
 
 from comicBase.comicBase import cb_home, cb_login, cb_logout
 from comicBase.comicBase import cb_add_comic, cb_delete, cb_unified_search
-from comicBase.comicBase import cb_display, cb_display_tables, cb_display_table_info
+from comicBase.comicBase import cb_display, cb_display_tables, cb_display_table_info, cb_volume_info
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -17,8 +17,6 @@ app.config.update(dict(
     PASSWORD='f'
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
-
-
 
 
 ########################################
@@ -87,9 +85,13 @@ def cb_display_tables_page():
     return cb_display_tables()
 
 # displays info from table chosen on "cb_display_tables_page"
-@app.route('/comicBase/tables/display-<table_name>')
-def cb_display_table_info_page(table_name):
-    return cb_display_table_info(table_name)
+@app.route('/comicBase/tables_display_<issue>_<volume>')
+def cb_display_table_info_page(issue, volume):
+    return cb_display_table_info(issue, volume)
+
+@app.route('/comicBase/volume_info')
+def cb_volume_info_page():
+    return cb_volume_info()
 
 
 ########################################

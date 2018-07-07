@@ -6,9 +6,9 @@
 
   <br><br>
 
-  {% for row in title_names %}
+  {% for row in rows %}
     <div class="fancy_box">
-      <a class="fancy_box" href="{{ url_for('cb_display_table_info_page', table_name=row[0]) }}">{{ row[0] }}</a>
+      <a class="letters" href="{{ url_for('cb_display_table_info_page', issue=row[0], volume=row[1]) }}">{{ row[1] }} - {{ row[0] }}</a>
     </div>
   {% endfor %}
 </div>

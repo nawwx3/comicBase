@@ -11,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
     <link rel="stylesheet" href="../static/test.css">
+    <!-- <link rel="stylesheet" href="../static/styles.css" -->
   </head>
 
   <body class="cb_background">
@@ -23,19 +24,25 @@
         <a class="navbar-brand" href="{{ url_for('cb_home_page') }}">ComicBase</a>
 
         {% if session['logged_in'] %}
-
-
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
+
               <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('cb_display_page') }}">Display All</a>
               </li>
-	      <li class="nav-item active">
+
+             <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('cb_display_tables_page') }}">Tables</a>
               </li>
+
               <li class="nav-item active">
                 <a class="nav-link" href="{{ url_for('cb_add_comic_page') }}">Add</a>
               </li>
+
+              <li class="nav-item active">
+                <a class="nav-link" href="{{ url_for('cb_volume_info_page') }}">Volume Info</a>
+              </li>
+
               <!-- search bar -->
               <form class="form-inline my-2 my-lg-0" action="{{ url_for('cb_unified_search_page') }}" method="POST">
                   <input type="text" class="form-control" name="search_bar" placeholder="Search">
@@ -52,7 +59,6 @@
               </li>
             </ul>
           </div>
-
         {% else %}
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav mr-auto">
@@ -65,7 +71,6 @@
 
       </nav>
     </div>
-
 
     <!-- get the flashed messages -->
     <div class="container">
@@ -84,7 +89,6 @@
     </div>
 
     {% block body %} {% endblock %}
-
 
     <script>function validateForm() {
       var name = document.forms["submit_form"]["issue_name"].value;

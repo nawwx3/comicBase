@@ -82,9 +82,15 @@ table {
 }
 
 .fancy_box {
-  width:  700px;
-  height: 50px;
+  width:  400px;
+  height: 30px;
+
   background-color: orange;
   border-radius: 12px;
   margin-bottom: 5px;
+}
+
+.letters {
+  font-size: 20px;
+  padding: 10px;
 }
