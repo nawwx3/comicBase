@@ -3,10 +3,10 @@ from functools import wraps
 import sqlite3
 
 # works on server
-import helper
+# import helper
 
 # works at home
-# import comicBase.helper as helper
+import comicBase.helper as helper
 
 def require_login(f):
     @wraps(f)
@@ -321,7 +321,6 @@ def cb_search():
 
 @require_login
 def cb_display():
-    # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
     with sqlite3.connect(helper.database_location) as conn:
         cur = conn.cursor()
         # collect all table names
@@ -417,6 +416,29 @@ def cb_unified_search():
 
 
 
+
+
+def cb_test_page():
+    with sqlite3.connect(helper.database_location) as conn:
+        cur = conn.cursor()
+
+        # get all the titles from comics
+        cur.execute(''' SELECT titles FROM comics ''')
+        title_names = cur.fetchall()
+
+    return render_template('test.html', title_names=title_names)
+
+def cb_test_display_info(table_name):
+    with sqlite3.connect(helper.database_location) as conn:
+        cur = conn.cursor()
+
+        # get all the titles from comics
+        cur.execute(''' SELECT * FROM {} '''.format(table_name))
+        rows = cur.fetchall()
+
+        issue, volume = helper.revert_title(table_name)
+
+    return render_template('test_display.html', rows=rows, issue=issue, volume=volume)
 
 
 

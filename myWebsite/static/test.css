@@ -80,3 +80,11 @@ table {
     border-collapse: collapse;
     width: 100%;
 }
+
+.fancy_box {
+  width:  700px;
+  height: 50px;
+  background-color: green;
+  border-radius: 12px;
+  margin-bottom: 5px;
+}

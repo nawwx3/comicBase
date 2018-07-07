@@ -1,14 +1,14 @@
 # works on server
-import .myWebsite.comicBase.helper as helper
+# import .myWebsite.comicBase.helper as helper
 
 # works at home
-# import sys
-# sys.path.append('../myWebsite/comicBase')
+import sys
+sys.path.append('../myWebsite/comicBase')
 
 import helper
 import glob
 
-for file_name in glob.glob('./files/*.txt'):
+for file_name in glob.glob('./input_files/*.txt'):
     with open(file_name) as file:
         id = 0
         for line in file:
