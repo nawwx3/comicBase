@@ -1,0 +1,15 @@
+{% extends "cb_header.html" %}
+{% block body %}
+<div class="container-fluid partial">
+  <h1>Choose a table</h1>
+  Here lies all the issue/volume pairs of comics in this database
+
+  <br><br>
+
+  {% for row in title_names %}
+    <div class="fancy_box">
+      <a class="fancy_box" href="{{ url_for('cb_display_table_info_page', table_name=row[0]) }}">{{ row[0] }}</a>
+    </div>
+  {% endfor %}
+</div>
+{% endblock %}

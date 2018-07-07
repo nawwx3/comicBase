@@ -3,8 +3,9 @@ import sqlite3
 from functools import wraps
 import os
 
-import comicBase.helper as helper
-from comicBase.comicBase import cb_home, cb_login, cb_logout, cb_add_comic, cb_delete, cb_display, cb_search, cb_unified_search, cb_test_page, cb_test_display_info
+from comicBase.comicBase import cb_home, cb_login, cb_logout
+from comicBase.comicBase import cb_add_comic, cb_delete, cb_unified_search
+from comicBase.comicBase import cb_display, cb_display_tables, cb_display_table_info
 
 app = Flask(__name__)
 app.config.from_object(__name__)
@@ -16,6 +17,9 @@ app.config.update(dict(
     PASSWORD='f'
 ))
 app.config.from_envvar('FLASKR_SETTINGS', silent=True)
+
+
+
 
 ########################################
 #####                              #####
@@ -39,62 +43,65 @@ def projects():
 
 ########################################
 #####                              #####
-#####          OTHER STUFF         #####
-#####                              #####
-########################################
-
-@app.route('/test')
-def test():
-    return render_template('test.html')
-
-
-########################################
-#####                              #####
 #####        COMICBASE STUFF       #####
 #####                              #####
 ########################################
 
 
+# home page
 @app.route('/comicBase')
 def cb_home_page():
     return cb_home()
 
-@app.route('/login', methods=['GET', 'POST'])
+@app.route('/comicBase/login', methods=['GET', 'POST'])
 def cb_login_page():
     return cb_login(app)
 
-@app.route('/logout')
+@app.route('/comicBase/logout')
 def cb_logout_page():
     return cb_logout(app)
 
-@app.route('/add_comic', methods=['GET', 'POST'])
+# add comic screen
+@app.route('/comicBase/add_comic', methods=['GET', 'POST'])
 def cb_add_comic_page():
     return cb_add_comic()
 
-@app.route('/display_comics')
+# displays all the comics
+@app.route('/comicBase/display_comics')
 def cb_display_page():
     return cb_display()
 
-@app.route('/delete_comic/<table>/<id>')
-def cb_delete_comic(table, id):
+# deletes selecteed comic
+@app.route('/comicBase/delete_comic/<table>/<id>')
+def cb_delete_page(table, id):
     return cb_delete(table, id)
 
-@app.route('/search_comics', methods=['POST'])
-def cb_search_page():
-    return cb_search()
-
-@app.route('/unified_search', methods=['POST'])
-def cb_unified():
+# searches through all comics
+@app.route('/comicBase/unified_search', methods=['POST'])
+def cb_unified_search_page():
     return cb_unified_search()
 
-@app.route('/test_page')
-def test_pages():
-    return cb_test_page()
+# displays the tables in the database
+@app.route('/comicBase/tables')
+def cb_display_tables_page():
+    return cb_display_tables()
 
-@app.route('/test_page_display/<table_name>')
-def test_page_display(table_name):
-    print(table_name)
-    return cb_test_display_info(table_name)
+# displays info from table chosen on "cb_display_tables_page"
+@app.route('/comicBase/tables/display-<table_name>')
+def cb_display_table_info_page(table_name):
+    return cb_display_table_info(table_name)
+
+
+########################################
+#####                              #####
+#####         TESTING STUFF        #####
+#####                              #####
+########################################
+
+
+
+
+
 
 if __name__ == '__main__':
     app.run()
