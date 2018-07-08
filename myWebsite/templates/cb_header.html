@@ -1,76 +1,74 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
   <head>
     <title>ComicBase</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/css/bootstrap.min.css">
-    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.6/umd/popper.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-beta.2/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <link rel="stylesheet" href="../static/test.css">
-    <!-- <link rel="stylesheet" href="../static/styles.css" -->
   </head>
 
   <body class="cb_background">
 
     <!-- Navigation Bar -->
-    <div style="margin-bottom: 10px" class="container-fluid">
-      <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark" style="margin-bottom: 10px">
+      <div class="navbar-header">
+        <a class="navbar-left" href="{{ url_for('cb_home_page') }}">
+          <img src="../static/cb_icon.png" height="30px">
+        </a>
+      </div>
 
-        <!-- is obviously the first part -->
-        <a class="navbar-brand" href="{{ url_for('cb_home_page') }}">ComicBase</a>
 
+      <!-- toggler -> when small screen (smaller than above 'navbar-expand-sm') gives option to have dropdown button so can still access navbar options -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_options" aria-controls="navbar_options" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbar_options">
         {% if session['logged_in'] %}
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{{ url_for('cb_display_page') }}">Display All <span class="sr-only">(current)</span></a>
+            </li>
 
-              <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('cb_display_page') }}">Display All</a>
-              </li>
+           <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('cb_display_tables_page') }}">Tables</a>
+            </li>
 
-             <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('cb_display_tables_page') }}">Tables</a>
-              </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('cb_add_comic_page') }}">Add</a>
+            </li>
 
-              <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('cb_add_comic_page') }}">Add</a>
-              </li>
+            <li class="nav-item">
+              <a class="nav-link" href="{{ url_for('cb_volume_info_page') }}">Volume Info</a>
+            </li>
 
-              <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('cb_volume_info_page') }}">Volume Info</a>
-              </li>
+            <!-- search bar -->
+            <form class="form-inline my-2 my-lg-0" action="{{ url_for('cb_unified_search_page') }}" method="POST">
+                <input type="text" class="form-control" name="search_bar" placeholder="Search">
+                <!-- <div class="input-group-append">
+                  <button class="btn btn-outline-secondary" type="submit">Search</button>
+                </div> -->
+            </form>
+          </ul>
 
-              <!-- search bar -->
-              <form class="form-inline my-2 my-lg-0" action="{{ url_for('cb_unified_search_page') }}" method="POST">
-                  <input type="text" class="form-control" name="search_bar" placeholder="Search">
-                  <!-- <div class="input-group-append">
-                    <button class="btn btn-outline-secondary" type="submit">Search</button>
-                  </div> -->
-              </form>
-            </ul>
-
-            <!-- right side navbar -->
-            <ul class="navbar-nav ml-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('cb_logout_page') }}">Logout</a>
-              </li>
-            </ul>
-          </div>
+          <!-- right side navbar -->
+          <ul class="navbar-nav ml-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{{ url_for('cb_logout_page') }}">Logout</a>
+            </li>
+          </ul>
         {% else %}
-          <div class="collapse navbar-collapse" id="navbarSupportedContent">
-            <ul class="navbar-nav mr-auto">
-              <li class="nav-item active">
-                <a class="nav-link" href="{{ url_for('cb_login_page') }}">Login<span class="sr-only">(current)</span></a>
-              </li>
-            </ul>
-          </div>
+          <ul class="navbar-nav mr-auto">
+            <li class="nav-item active">
+              <a class="nav-link" href="{{ url_for('cb_login_page') }}">Login<span class="sr-only">(current)</span></a>
+            </li>
+          </ul>
         {% endif %}
+      </div>
 
-      </nav>
-    </div>
+    </nav>
 
     <!-- get the flashed messages -->
     <div class="container">
@@ -90,19 +88,10 @@
 
     {% block body %} {% endblock %}
 
-    <script>function validateForm() {
-      var name = document.forms["submit_form"]["issue_name"].value;
-      var num = document.forms["submit_form"]["issue_number"].value;
-      var vol = document.forms["submit_form"]["volume"].value;
-      if (vol != "" && name == "") {
-        window.alert("Volume must be accompanied by Issue Name");
-        return false;
-      }
-      if (num != "" && name == "") {
-        window.alert("Issue Number must be accompanied by Issue Name");
-        return false;
-      }
-    }</script>
-
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
 </html>
