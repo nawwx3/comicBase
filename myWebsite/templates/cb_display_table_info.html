@@ -2,6 +2,12 @@
 {% block body %}
 <div class="container-fluid partial">
 
+  <form action="{{ url_for('cb_add_comic_page', volume=volume, issue=issue) }}" name="new_comic">
+    <h1>{{issue}} - {{volume}}</h1>
+    <input type="submit" value="Add Comic"/>
+  </form>
+
+
   <table class="table table-striped">
     <thead class="thead-dark">
       <tr>

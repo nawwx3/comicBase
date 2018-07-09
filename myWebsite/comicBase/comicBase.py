@@ -39,7 +39,7 @@ def cb_logout(app):
     return redirect(url_for('cb_home_page'))
 
 @require_login
-def cb_add_comic():
+def cb_add_comic(issue, volume):
     if request.method == 'POST':
         try:
             name = request.form['issue_name']
@@ -100,7 +100,7 @@ def cb_add_comic():
             print('closed the connection')
             return redirect(url_for('cb_display_page'))
 
-    return render_template('cb_add_comic.html')
+    return render_template('cb_add_comic.html', issue=issue, volume=volume)
 
 @require_login
 def cb_delete(table, id):

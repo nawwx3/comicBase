@@ -8,15 +8,26 @@
     </div>
 
     <form action="{{ url_for('cb_add_comic_page') }}" name="submit_form" onsubmit="return valForm()" method="POST">
-       <h3>comic Information</h3>
-       <input type="text" name="issue_name" placeholder="Issue Name"></input></br>
-       <input type="text" name="issue_number" placeholder="Issue Number"></input><br>
-       <input type="text" name="volume" placeholder="Volume"></input><br>
-       <input type="text" name="arc" placeholder="Arc"></input><br>
-       <input type="text" name="title" placeholder="Title"></input><br>
-       <input type="text" name="price" placeholder="0.00"></input><br>
+       <h3>Comic Information</h3>
+      {% if issue == "" %}
+        <input type="text" name="issue_name" placeholder="Issue Name"></input></br>
+      {% else %}
+        <input type="text" name="issue_name" value="{{issue}}"></input></br>
+      {% endif %}
 
-       <input type="submit" value="submit" /><br>
+      <input type="text" name="issue_number" placeholder="Issue Number"></input><br>
+
+      {% if volume == "" %}
+        <input type="text" name="volume" placeholder="Volume"></input><br>
+      {% else %}
+        <input type="text" name="volume" value="{{volume}}"></input><br>
+      {% endif %}
+
+      <input type="text" name="arc" placeholder="Arc"></input><br>
+      <input type="text" name="title" placeholder="Title"></input><br>
+      <input type="text" name="price" placeholder="0.00"></input><br>
+
+      <input type="submit" value="submit" /><br>
     </form>
 
     <script>
