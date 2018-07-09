@@ -107,24 +107,17 @@ def cb_delete(table, id):
 
     try:
         with sqlite3.connect(helper.database_location) as conn:
-            print('\n')
             cur = conn.cursor()
-
-            print('type: ', type(table), type(id))
-
             cur.execute(''' DELETE FROM {}
                             WHERE id={}  '''
                             .format(table, id))
-
             conn.commit()
             flash('Record successfully deleted!')
 
             cur.execute(''' SELECT COUNT(id)
                             FROM {}'''.format(table))
             a = cur.fetchall()
-            print('number id in {}:  {}'.format(table, a[0][0]))
             if a[0][0] == 0:
-
                 # drop the table hen have to delete the entry from 'comics' table
                 cur.execute('''DROP TABLE {}'''.format(table))
                 cur.execute("DELETE FROM comics WHERE titles=?", (table,))
@@ -153,9 +146,12 @@ def cb_display():
         tables = cur.fetchall()
 
         rows = [] # list of entries
+
+        sorted_tables = helper.sort_tables(tables) # sorts tables based on issue_name
+
         # for each of the tables, get their info
-        for table in tables:
-            table_title = table[0]
+        for table_title in sorted_tables:
+            # table_title = table[0]
             # get all the entries from table
             cur.execute('''SELECT * from {} ORDER BY issue_number ASC'''.format(table_title))
             table_entries = cur.fetchall()
@@ -237,13 +233,15 @@ def cb_display_tables():
         cur = conn.cursor()
 
         # get all the titles from comics
-        cur.execute(''' SELECT titles FROM comics ''')
+        cur.execute(''' SELECT titles FROM comics order by titles asc ''')
         title_names = cur.fetchall()
 
+        sorted_tables = helper.sort_tables(title_names)
+
         rows = []
-        for title in title_names:
-            issue, volume = helper.revert_title(title[0])
-            rows.append((issue, volume))
+        for title in sorted_tables:
+            issue, volume = helper.revert_title(title)
+            rows.append([issue, volume])
 
     return render_template('cb_display_tables.html', rows=rows)
 
@@ -258,7 +256,7 @@ def cb_display_table_info(issue, volume):
         cur.execute(''' SELECT * FROM {} order by issue_number ASC'''.format(table_name))
         rows = cur.fetchall()
 
-    return render_template('cb_display_table_info.html', rows=rows, issue=issue, volume=volume)
+    return render_template('cb_display_table_info.html', rows=rows, issue=issue, volume=volume, table_name=table_name)
 
 @require_login
 def cb_volume_info():

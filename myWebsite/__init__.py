@@ -71,7 +71,7 @@ def cb_add_comic_page(issue="", volume=""):
 def cb_display_page():
     return cb_display()
 
-# deletes selecteed comic
+    # deletes selecteed comic
 @app.route('/comicBase/delete_comic/<table>/<id>')
 def cb_delete_page(table, id):
     return cb_delete(table, id)

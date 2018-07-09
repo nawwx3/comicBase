@@ -32,7 +32,7 @@
           <td>{{ row[4] }}</td>
 
           <td>
-            <a class="button button-delete" href="{{ url_for('cb_delete_page', table=row[6], id=row[7]) }}">x</a>
+            <a class="button button-delete" href="{{ url_for('cb_delete_page', table=table_name, id=row[0]) }}">x</a>
           </td>
         </tr>
     {% endfor %}
