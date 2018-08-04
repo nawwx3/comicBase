@@ -7,6 +7,8 @@ from comicBase.comicBase import cb_home, cb_login, cb_logout
 from comicBase.comicBase import cb_add_comic, cb_delete, cb_unified_search
 from comicBase.comicBase import cb_display, cb_display_tables, cb_display_table_info, cb_volume_info
 
+from app.app import app_login
+
 app = Flask(__name__)
 app.config.from_object(__name__)
 
@@ -37,6 +39,18 @@ def about_me():
 @app.route('/projects')
 def projects():
     return render_template('mw_projects.html')
+
+
+########################################
+#####                              #####
+#####           APP STUFF          #####
+#####                              #####
+########################################
+
+
+@app.route('/comicBase/a_log')
+def a_login():
+    return app_login('f', 'f')
 
 
 ########################################

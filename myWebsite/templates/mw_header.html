@@ -1,24 +1,48 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <link rel="stylesheet" href="../static/styles.css">
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
-    <title>nathanwelch.me</title>
+    <meta charset="utf-8">
+    <!-- this is for "mobile first" rendering and touch zooming -->
+    <meta name="viewport" content="width=device-width, initial-scale=1">
 
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link rel="stylesheet" href="../static/test.css">
+
+    <title>nathanwelch.me</title>
   </head>
 
   <body style="background-color:#d3e8d7;font-family:Verdana, Geneva, sans-serif">
 
-    <ul>
-      <li><a href="{{ url_for('home') }}">Home</a></li>
-      <li><a href="{{ url_for('about_me') }}">About Me</a></li>
-      <li><a href="{{ url_for('projects') }}">Projects</a></li>
-    </ul>
+    <!-- Navigation Bar -->
+    <nav class="navbar navbar-expand-md navbar-dark bg-dark" style="margin-bottom: 10px">
+      <div class="navbar-header">
+        <a class="navbar-brand" href="{{ url_for('home') }}">Home</a>
+      </div>
 
-  {% block body %} {% endblock %}
 
+      <!-- toggler -> when small screen (smaller than above 'navbar-expand-sm') gives option to have dropdown button so can still access navbar options -->
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbar_options" aria-controls="navbar_options" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbar_options">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item active">
+            <a class="nav-link" href="{{ url_for('about_me') }}">About Me</a>
+          </li>
+          <li class="nav-item active">
+            <a class="nav-link" href="{{ url_for('projects') }}">Projects</a>
+          </li>
+        </ul>
+      </div>
+
+    </nav>
+
+    {% block body %} {% endblock %}
+    <!-- Optional JavaScript -->
+    <!-- jQuery first, then Popper.js, then Bootstrap JS -->
+    <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
   </body>
-
-
-
 </html>
