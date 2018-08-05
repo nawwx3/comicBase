@@ -19,16 +19,32 @@ print('Other existing tables dropped')
 cur.execute('DROP TABLE IF exists comics')
 print('comics table dropped')
 
-# inserts the tables into the database
-with app.open_resource('sql/tables.sql', mode='r') as f:
-    cur.executescript(f.read())
-db.commit()
-print('Tables initialized')
 
-with app.open_resource('sql/entries.sql', mode='r') as f:
+
+with app.open_resource('sql/comics_entries.sql', mode='r') as f:
     cur.executescript(f.read())
 db.commit()
-print('Entries initialized')
+print('comics Table Initialized')
+
+with app.open_resource('sql/rebirth_tables.sql', mode='r') as f:
+    cur.executescript(f.read())
+db.commit()
+print('Rebirth Tables Initialized')
+
+with app.open_resource('sql/rebirth_entries.sql', mode='r') as f:
+    cur.executescript(f.read())
+db.commit()
+print('Rebirth Entries Initialized')
+
+with app.open_resource('sql/old_tables.sql', mode='r') as f:
+    cur.executescript(f.read())
+db.commit()
+print('Old Tables Initialized')
+
+with app.open_resource('sql/old_entries.sql', mode='r') as f:
+    cur.executescript(f.read())
+db.commit()
+print('Old Entries Initialized')
 
 print("Database initialized!")
 
