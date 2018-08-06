@@ -36,7 +36,6 @@ def sort_tables(tables):
     # put them back together`
     sorted_tables = []
     for table in table_parts:
-        print(table)
         sorted_tables.append(convert_title(table[0], table[1]))
 
     return sorted_tables

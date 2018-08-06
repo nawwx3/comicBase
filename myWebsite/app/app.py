@@ -3,6 +3,8 @@ from functools import wraps
 import sqlite3
 
 def app_login(username, password):
-    if request.method == 'POST':
-        if username == 'f' and password == 'f':
-            session['logged_in'] = True
+    # if request.method == 'POST':
+        # if username == 'f' and password == 'f':
+    session['logged_in'] = True
+    print('YOU HAVE ATTEMPTED TO LOGIN')
+    return render_template('cb_home.html')

@@ -77,7 +77,6 @@ def cb_logout_page():
 @app.route('/comicBase/add_comic', methods=['GET', 'POST'])
 @app.route('/comicBase/add_comic_<issue>_<volume>', methods=['GET', 'POST'])
 def cb_add_comic_page(issue="", volume=""):
-    print(issue, volume)
     return cb_add_comic(issue, volume)
 
 # displays all the comics
