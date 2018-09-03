@@ -55,10 +55,7 @@ def cb_add_comic(issue, volume):
             # open a connection to the database
             # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
             with sqlite3.connect(helper.database_location) as conn:
-                print('is it connecting')
                 cur = conn.cursor()
-
-                print('after cur is made')
 
                 # if the table has not been made yet then make it
                 cur.execute('''CREATE TABLE if not exists {} (
@@ -67,8 +64,6 @@ def cb_add_comic(issue, volume):
                         title varchar(100),
                         arc varchar(50),
                         price float);'''.format(table_title))
-
-                print('after first execute')
 
                 # add the entry into the table
                 cur.execute('''  INSERT INTO {} (issue_number, title, arc, price)
@@ -79,25 +74,18 @@ def cb_add_comic(issue, volume):
                     cur.execute('''
                         INSERT INTO comics (titles)
                         VALUES (?)''', [table_title] )
-                    print('------------- Insert successful')
                 except:
                     # if it doesn't work its already in there
-                    print('------------  it was already there')
                     pass
 
                 conn.commit()
-                print('comic added successfully')
                 flash('Record successfully added')
 
         except Exception as e:
-            print('inside the except', e)
             conn.rollback()
-            print('FAILED TO ENTER COMIC')
             flash('error in insert operation', 'error')
 
         finally:
-            print('inside the finally')
-            print('closed the connection')
             return redirect(url_for('cb_display_page'))
 
     return render_template('cb_add_comic.html', issue=issue, volume=volume)
@@ -126,7 +114,6 @@ def cb_delete(table, id):
                 conn.commit()
 
     except Exception as e:
-        print('error: ', e)
         conn.rollback()
         conn.close()
         flash('Error in delete operation', 'error')
@@ -141,31 +128,31 @@ def cb_delete(table, id):
 def cb_display():
     with sqlite3.connect(helper.database_location) as conn:
         cur = conn.cursor()
-        # collect all table names
-        cur.execute('''SELECT titles FROM comics ORDER BY titles ASC''')
-        tables = cur.fetchall()
 
-        rows = [] # list of entries
 
-        sorted_tables = helper.sort_tables(tables) # sorts tables based on issue_name
+        cur.execute(''' SELECT Volume.vol_name, Comics.issue_num, Volume.vol_number, Comics.title, Comics.arc, Comics.price
+                        FROM Volume, Comics
+                        WHERE Comics.vol_id == Volume.vol_id
+                        ORDER BY Volume.vol_name ASC, Comics.issue_num ASC
+                    ''')
+        comics = cur.fetchall()
 
-        # for each of the tables, get their info
-        for table_title in sorted_tables:
-            # table_title = table[0]
-            # get all the entries from table
-            cur.execute('''SELECT * from {} ORDER BY issue_number ASC'''.format(table_title))
-            table_entries = cur.fetchall()
+        rows = []
+        for comic in comics:
+            rows.append(comic)
 
-            issue, volume = helper.revert_title(table_title)
+    return render_template("cb_display.html", rows=rows)
 
-            for entry in table_entries:
-                if table_title in ["Annual_Rebirth"]:
-                    rows.append([issue+' '+entry[1], entry[2], entry[3], entry[4], entry[5], entry[6], table_title, entry[0]])
-                else:
-                    #         issue, number, volume, title, arc, price, table_title, id
-                    rows.append([issue, entry[1], volume, entry[2], entry[3], entry[4], table_title, entry[0]])
-    # return render_template("cb_display.html")
-    return render_template("cb_display.html",rows = rows)
+
+
+
+
+
+
+
+
+
+
 
 @require_login
 def cb_unified_search():
