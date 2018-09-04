@@ -12,7 +12,7 @@
       </div>
     </div>
 
-    <form>
+    <form action="{{ url_for('cb_add_comic_page') }}" method="POST">
       <h3>Comic Information</h3>
 
       <table class="table_new" align="center">
@@ -20,9 +20,9 @@
           <tr>
             <td align="right">Volume Name: </td>
             <td align="left">
-              <select name=dropdown>
+              <select name=volume_dropdown>
                 {% for volume in volumes %}
-              <option value={{ volume[0] }}>{{ volume[0] }}</option>
+              <option value={{ volume[2] }}>{{ volume[0] }} V{{ volume[1] }}</option>
                 {% endfor %}
               </select>
             </td>
@@ -65,7 +65,7 @@
 
     </form>
 
-    <script>
+    <!-- <script>
       function valForm() {
         var name = document.forms["submit_form"]["issue_name"].value;
         var num = document.forms["submit_form"]["issue_number"].value;
@@ -76,6 +76,6 @@
           return false;
         }
       }
-    </script>
+    </script> -->
 
 {% endblock %}

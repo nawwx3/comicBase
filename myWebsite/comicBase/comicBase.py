@@ -40,17 +40,14 @@ def cb_logout(app):
 
 @require_login
 def cb_add_comic(issue, volume):
+    print('happening')
     if request.method == 'POST':
         try:
-            vol_name = request.form['issue_name']
-            num = request.form['issue_number']
-            volume = request.form['volume']
+            vol_id = request.form['volume_dropdown']
+            issue_num = request.form['issue_number']
             title = request.form['title']
             arc = request.form['arc']
             price = request.form['price']
-
-
-            dropdown = request.form['dropdown']
 
             # open a connection to the database
             # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
@@ -58,15 +55,15 @@ def cb_add_comic(issue, volume):
                 cur = conn.cursor()
 
                 # get the publisher's id
-                cur.execute(''' SELECT v.pub_id
-                                FROM Volume as v, Publisher as p
-                                WHERE v.vol_name == ? AND p.pub_id == v.pub_id
-                            ''', [vol_name])
+                cur.execute(''' SELECT pub_id
+                                FROM Volume
+                                WHERE vol_id == ?
+                            ''', [vol_id])
                 pub_id = cur.fetchall()
 
-                # cur.execute(''' INSERT INTO Comics
-                #                 VALUES(?, ?, ?, ?, ?, ?, ?)
-                #             ''', [None, pub_id, vol_id, issue_num, title, arc, price])
+                cur.execute(''' INSERT INTO Comics
+                                VALUES(?, ?, ?, ?, ?, ?, ?)
+                            ''', [None, pub_id[0], vol_id, issue_num, title, arc, price])
 
                 conn.commit()
                 flash('Record successfully added')
@@ -83,7 +80,7 @@ def cb_add_comic(issue, volume):
         with sqlite3.connect(helper.database_location) as conn:
             cur = conn.cursor()
 
-            cur.execute(''' SELECT vol_name
+            cur.execute(''' SELECT vol_name, vol_number, vol_id
                             FROM Volume
                         ''')
             volumes = cur.fetchall()
@@ -94,7 +91,7 @@ def cb_add_comic(issue, volume):
 
 @require_login
 def cb_delete(id):
-
+    print(id)
     try:
         with sqlite3.connect(helper.database_location) as conn:
             cur = conn.cursor()
