@@ -24,15 +24,15 @@
 
     {% for row in rows %}
         <tr>
-          <td>{{ issue }}</td>
+          <td>{{ row[0] }}</td>
           <td>{{ row[1] }}</td>
-          <td>{{ volume }}</td>
           <td>{{ row[2] }}</td>
           <td>{{ row[3] }}</td>
           <td>{{ row[4] }}</td>
+          <td>{{ row[5] }}</td>
 
           <td>
-            <a class="button button-delete" href="{{ url_for('cb_delete_page', table=table_name, id=row[0]) }}">x</a>
+            <a class="button button-delete" href="{{ url_for('cb_delete_page', id=row[6]) }}">x</a>
           </td>
         </tr>
     {% endfor %}

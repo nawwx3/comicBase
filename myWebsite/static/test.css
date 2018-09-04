@@ -81,6 +81,12 @@ table {
     width: 100%;
 }
 
+.table_new {
+  font-size: 22px;
+  color: Black;
+  width: 30%;
+}
+
 .fancy_box {
   width:  400px;
   height: 30px;

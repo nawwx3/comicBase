@@ -42,77 +42,66 @@ def cb_logout(app):
 def cb_add_comic(issue, volume):
     if request.method == 'POST':
         try:
-            name = request.form['issue_name']
+            vol_name = request.form['issue_name']
             num = request.form['issue_number']
             volume = request.form['volume']
             title = request.form['title']
             arc = request.form['arc']
             price = request.form['price']
 
-            issue_name = name.lower()
-            table_title = helper.convert_title(name, volume)
+
+            dropdown = request.form['dropdown']
 
             # open a connection to the database
             # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
             with sqlite3.connect(helper.database_location) as conn:
                 cur = conn.cursor()
 
-                # if the table has not been made yet then make it
-                cur.execute('''CREATE TABLE if not exists {} (
-                        id integer primary key autoincrement,
-                        issue_number varchar(5) not null,
-                        title varchar(100),
-                        arc varchar(50),
-                        price float);'''.format(table_title))
+                # get the publisher's id
+                cur.execute(''' SELECT v.pub_id
+                                FROM Volume as v, Publisher as p
+                                WHERE v.vol_name == ? AND p.pub_id == v.pub_id
+                            ''', [vol_name])
+                pub_id = cur.fetchall()
 
-                # add the entry into the table
-                cur.execute('''  INSERT INTO {} (issue_number, title, arc, price)
-                    VALUES (?,?,?,?)  '''.format(table_title),(num, title, arc, price) )
-
-                # try to add table_name into comics
-                try:
-                    cur.execute('''
-                        INSERT INTO comics (titles)
-                        VALUES (?)''', [table_title] )
-                except:
-                    # if it doesn't work its already in there
-                    pass
+                # cur.execute(''' INSERT INTO Comics
+                #                 VALUES(?, ?, ?, ?, ?, ?, ?)
+                #             ''', [None, pub_id, vol_id, issue_num, title, arc, price])
 
                 conn.commit()
                 flash('Record successfully added')
 
         except Exception as e:
             conn.rollback()
+            print('exception', e)
             flash('error in insert operation', 'error')
 
         finally:
             return redirect(url_for('cb_display_page'))
 
+    if request.method == 'GET':
+        with sqlite3.connect(helper.database_location) as conn:
+            cur = conn.cursor()
+
+            cur.execute(''' SELECT vol_name
+                            FROM Volume
+                        ''')
+            volumes = cur.fetchall()
+        return render_template('cb_add_comic.html', issue=issue, volume=volume, volumes=volumes)
+
+
     return render_template('cb_add_comic.html', issue=issue, volume=volume)
 
 @require_login
-def cb_delete(table, id):
+def cb_delete(id):
 
     try:
         with sqlite3.connect(helper.database_location) as conn:
             cur = conn.cursor()
-            cur.execute(''' DELETE FROM {}
-                            WHERE id={}  '''
-                            .format(table, id))
-            conn.commit()
-            flash('Record successfully deleted!')
 
-            cur.execute(''' SELECT COUNT(id)
-                            FROM {}'''.format(table))
-            a = cur.fetchall()
-            if a[0][0] == 0:
-                # drop the table hen have to delete the entry from 'comics' table
-                cur.execute('''DROP TABLE {}'''.format(table))
-                cur.execute("DELETE FROM comics WHERE titles=?", (table,))
-
-                flash('Table empty, deleted table {}'.format(table), 'warn')
-                conn.commit()
-
+            cur.execute(''' DELETE FROM Comics
+                            WHERE comic_id == ?
+                        ''', [id])
     except Exception as e:
         conn.rollback()
         conn.close()
@@ -121,7 +110,6 @@ def cb_delete(table, id):
         conn.close()
         return redirect(url_for('cb_display_page'))
 
-    flash('Refresh page!', 'warn')
     return render_template('cb_display.html')
 
 @require_login
@@ -142,17 +130,6 @@ def cb_display():
             rows.append(comic)
 
     return render_template("cb_display.html", rows=rows)
-
-
-
-
-
-
-
-
-
-
-
 
 @require_login
 def cb_unified_search():
@@ -220,30 +197,36 @@ def cb_display_tables():
         cur = conn.cursor()
 
         # get all the titles from comics
-        cur.execute(''' SELECT titles FROM comics order by titles asc ''')
-        title_names = cur.fetchall()
 
-        sorted_tables = helper.sort_tables(title_names)
+        cur.execute(''' SELECT vol_name, vol_number, vol_id
+                        FROM Volume
+                        ORDER BY vol_name ASC, vol_number ASC
+                    ''')
+        volumes = cur.fetchall()
 
-        rows = []
-        for title in sorted_tables:
-            issue, volume = helper.revert_title(title)
-            rows.append([issue, volume])
+    rows = []
+    for volume in volumes:
+        rows.append(volume)
 
     return render_template('cb_display_tables.html', rows=rows)
 
 @require_login
-def cb_display_table_info(issue, volume):
+def cb_display_table_info(id):
     with sqlite3.connect(helper.database_location) as conn:
         cur = conn.cursor()
 
-        table_name = helper.convert_title(issue, volume)
+        cur.execute(''' SELECT v.vol_name, c.issue_num, v.vol_number, c.title, c.arc, c.price, c.comic_id
+                        FROM Volume as v, Comics as c
+                        WHERE c.vol_id == ? and v.vol_id == ?
+                        ORDER BY c.issue_num
+                    ''', [id, id])
 
-        # get all the titles from comics
-        cur.execute(''' SELECT * FROM {} order by issue_number ASC'''.format(table_name))
         rows = cur.fetchall()
 
-    return render_template('cb_display_table_info.html', rows=rows, issue=issue, volume=volume, table_name=table_name)
+    issue = rows[0][0]
+    volume = rows[0][2]
+
+    return render_template('cb_display_table_info.html', rows=rows, issue=issue, volume=volume)
 
 @require_login
 def cb_volume_info():

@@ -85,9 +85,9 @@ def cb_display_page():
     return cb_display()
 
     # deletes selecteed comic
-@app.route('/comicBase/delete_comic/<table>/<id>')
-def cb_delete_page(table, id):
-    return cb_delete(table, id)
+@app.route('/comicBase/delete_comic/<id>')
+def cb_delete_page(id):
+    return cb_delete(id)
 
 # searches through all comics
 @app.route('/comicBase/unified_search', methods=['POST'])
@@ -100,9 +100,9 @@ def cb_display_tables_page():
     return cb_display_tables()
 
 # displays info from table chosen on "cb_display_tables_page"
-@app.route('/comicBase/tables_display_<issue>_<volume>')
-def cb_display_table_info_page(issue, volume):
-    return cb_display_table_info(issue, volume)
+@app.route('/comicBase/tables_display_<id>')
+def cb_display_table_info_page(id):
+    return cb_display_table_info(id)
 
 @app.route('/comicBase/volume_info')
 def cb_volume_info_page():
