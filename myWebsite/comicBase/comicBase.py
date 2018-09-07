@@ -275,13 +275,18 @@ def cb_display_table_info(id):
                         WHERE c.vol_id == ? and v.vol_id == ?
                         ORDER BY c.issue_num
                     ''', [id, id])
-
         rows = cur.fetchall()
+
+        cur.execute(''' SELECT *
+                        FROM Volumes
+                        WHERE vol_id == ?
+                    ''', [id])
+        vol_info = cur.fetchall()
 
     issue = rows[0][0]
     volume = rows[0][2]
 
-    return render_template('cb_display_table_info.html', rows=rows, issue=issue, volume=volume)
+    return render_template('cb_display_table_info.html', rows=rows, issue=issue, volume=volume, vol_info)
 
 @require_login
 def cb_volume_info():

@@ -8,7 +8,11 @@
 
   {% for row in rows %}
     <div class="fancy_box">
-      <a class="letters" href="{{ url_for('cb_display_table_info_page', id=row[2]) }}">{{ row[0] }} - {{ row[1] }}</a>
+      {% if row[1] == "" %}
+        <a class="letters" href="{{ url_for('cb_display_table_info_page', id=row[2]) }}">{{ row[0] }}</a>
+      {% else %}
+        <a class="letters" href="{{ url_for('cb_display_table_info_page', id=row[2]) }}">{{ row[0] }} - {{ row[1] }}</a>
+      {% endif %}
     </div>
   {% endfor %}
 </div>

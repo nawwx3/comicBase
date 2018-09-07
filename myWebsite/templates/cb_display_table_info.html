@@ -7,7 +7,30 @@
     <input type="submit" value="Add Comic"/>
   </form>
 
+  <table class="table_new" align="center">
+    <tbody>
+      <tr>
+        <td align="right">Starting: </td>
+        <td align="left">
+          {{ vol_info[4] }} {{ vol_info[5] }}
+        </td>
+      </tr>
+      <tr>
+        <td align="right">Ending: </td>
+        <td align="left">
+          {{ vol_info[6] }} {{ vol_info[7] }}
+        </td>
+      </tr>
+      <tr>
+        <td align="right">Link: </td>
+        <td align="left">
+          {{ vol_info[8] }}
+        </td>
+      </tr>
+    </tbody>
+  </table>
 
+  <!-- comics table in volume_page -->
   <table class="table table-striped">
     <thead class="thead-dark">
       <tr>
