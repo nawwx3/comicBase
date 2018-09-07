@@ -7,6 +7,12 @@ app = Flask(__name__)
 db = sqlite3.connect(helper.database_location)
 cur = db.cursor()
 
+cur.execute(''' DROP TABLE IF EXISTS Comics''')
+cur.execute(''' DROP TABLE IF EXISTS Volumes''')
+cur.execute(''' DROP TABLE IF EXISTS Publishers''')
+cur.execute(''' DROP TABLE IF EXISTS GraphicNovels''')
+
+
 with app.open_resource('sql/new_tables.sql', mode='r') as f:
     cur.executescript(f.read())
 db.commit()

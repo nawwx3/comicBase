@@ -54,16 +54,9 @@ def cb_add_comic(issue, volume):
             with sqlite3.connect(helper.database_location) as conn:
                 cur = conn.cursor()
 
-                # get the publisher's id
-                cur.execute(''' SELECT pub_id
-                                FROM Volume
-                                WHERE vol_id == ?
-                            ''', [vol_id])
-                pub_id = cur.fetchall()
-
                 cur.execute(''' INSERT INTO Comics
-                                VALUES(?, ?, ?, ?, ?, ?, ?)
-                            ''', [None, pub_id[0], vol_id, issue_num, title, arc, price])
+                                VALUES(?, ?, ?, ?, ?, ?)
+                            ''', [None, vol_id, issue_num, title, arc, price])
 
                 conn.commit()
                 flash('Record successfully added')
@@ -81,7 +74,7 @@ def cb_add_comic(issue, volume):
             cur = conn.cursor()
 
             cur.execute(''' SELECT vol_name, vol_number, vol_id
-                            FROM Volume
+                            FROM Volumes
                         ''')
             volumes = cur.fetchall()
         return render_template('cb_add_comic.html', issue=issue, volume=volume, volumes=volumes)
@@ -91,7 +84,6 @@ def cb_add_comic(issue, volume):
 
 @require_login
 def cb_delete(id):
-    print(id)
     try:
         with sqlite3.connect(helper.database_location) as conn:
             cur = conn.cursor()
@@ -104,6 +96,7 @@ def cb_delete(id):
         conn.close()
         flash('Error in delete operation', 'error')
     finally:
+        flash('Successfully deleted comic!')
         conn.close()
         return redirect(url_for('cb_display_page'))
 
@@ -114,11 +107,10 @@ def cb_display():
     with sqlite3.connect(helper.database_location) as conn:
         cur = conn.cursor()
 
-
-        cur.execute(''' SELECT Volume.vol_name, Comics.issue_num, Volume.vol_number, Comics.title, Comics.arc, Comics.price
-                        FROM Volume, Comics
-                        WHERE Comics.vol_id == Volume.vol_id
-                        ORDER BY Volume.vol_name ASC, Comics.issue_num ASC
+        cur.execute(''' SELECT Volumes.vol_name, Comics.issue_num, Volumes.vol_number, Comics.title, Comics.arc, Comics.price, Comics.comic_id
+                        FROM Volumes, Comics
+                        WHERE Comics.vol_id == Volumes.vol_id
+                        ORDER BY Volumes.vol_name ASC, Comics.issue_num ASC
                     ''')
         comics = cur.fetchall()
 
@@ -128,65 +120,54 @@ def cb_display():
 
     return render_template("cb_display.html", rows=rows)
 
-@require_login
-def cb_unified_search():
-
-    ''' open database
-        cycle through all entries
-            for entry check if match to category
-                if match add to array
-        output
-    '''
-    if request.method == 'POST':
-        search_data = request.form['search_bar']
-        search_nums = []
-        search_words = ''
-        parts = search_data.split(' ')
-        for part in parts:
-            if part.isdigit():
-                search_nums.append(int(part))
-            search_words = search_words + part.lower()
-
-        # open database
-        with sqlite3.connect(helper.database_location) as conn:
-            cur = conn.cursor()
-            cur.execute(''' SELECT * from comics ''')
-            tables = cur.fetchall()
-
-            name_data = []
-            single_data = []
-            vol_data = []
-            group_data = []
-            title_data = []
-            arc_data = []
-
-            for table in tables:
-                name, volume = helper.revert_title(table[1])
-                cur.execute(''' SELECT * from {} '''.format(table[1]))
-                rows = cur.fetchall()
-
-                for row in rows:
-                    # if individual comics match issue number
-                    if row[1] in search_nums:
-                        group_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
-
-                    # if matched issue name
-                    if name.replace(' ', '').lower() in search_words:
-                        name_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
-
-                    # if matched volume name
-                    if volume.lower() in search_words:
-                        volume_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
-
-                    # if matched arc name
-                    if search_words in row[3].lower() and row[3] != '':
-                        arc_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
-
-                    # if matches part of title
-                    if search_words in row[2].lower() :
-                        title_data.append([name, row[1], volume, row[2], row[3], row[4], table[1], row[0]])
-
-        return render_template('cb_display_search.html', name_data=name_data, single_data=single_data, group_data=group_data, vol_data=vol_data, title_data=title_data, arc_data=arc_data)
+# @require_login
+# def cb_unified_search():
+#
+#     ''' open database
+#         cycle through all entries
+#             for entry check if match to category
+#                 if match add to array
+#         output
+#     '''
+#     if request.method == 'POST':
+#         search_data = request.form['search_bar'].split()
+#         print('-{}-'.format(search_data))
+#
+#         with sqlite3.connect(helper.database_location) as conn:
+#             cur = conn.cursor()
+#
+#             # first check for matching volumes
+#             if len(search_data) == 2:
+#                 if check_data(search_data):
+#                     print('worked', search_data)
+#
+#                     # probably a volume name/number or issue name/number
+#                     cur.execute(''' SELECT c.title
+#                                     FROM Comics as c, Volumes as v
+#                                     WHERE  v.vol_name == ?  and c.vol_id == v.vol_id and c.issue_num == ?
+#                     ''', [search_data[0], search_data[1]])
+#
+#                     data = cur.fetchall()
+#                     for i in data:
+#                         print(i)
+#
+#             # for word in search_words:
+#             #     if any(char.isdigit() for char in word):
+#             #         # if there are any numbers in the string, don't check it
+#             #         continue
+#             #     else:
+#             #         cur.execute()
+#
+#         return render_template('cb_home.html')
+#
+# def check_data(search_data):
+#     if search_data[0].isdigit() and not any(char.isdigit() for char in search_data[1]):
+#         print('little work')
+#         return [search_data[1], search_data[0]]
+#     if search_data[1].isdigit() and not any(char.isdigit() for char in search_data[0]):
+#         print('No Work')
+#         return search_data
+#     return False
 
 @require_login
 def cb_display_tables():
@@ -196,7 +177,7 @@ def cb_display_tables():
         # get all the titles from comics
 
         cur.execute(''' SELECT vol_name, vol_number, vol_id
-                        FROM Volume
+                        FROM Volumes
                         ORDER BY vol_name ASC, vol_number ASC
                     ''')
         volumes = cur.fetchall()
@@ -213,7 +194,7 @@ def cb_display_table_info(id):
         cur = conn.cursor()
 
         cur.execute(''' SELECT v.vol_name, c.issue_num, v.vol_number, c.title, c.arc, c.price, c.comic_id
-                        FROM Volume as v, Comics as c
+                        FROM Volumes as v, Comics as c
                         WHERE c.vol_id == ? and v.vol_id == ?
                         ORDER BY c.issue_num
                     ''', [id, id])
