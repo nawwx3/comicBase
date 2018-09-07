@@ -1,0 +1,41 @@
+{% extends "cb_header.html" %}
+{% block body %}
+
+    <div class="container">
+      <div class="jumbotron jumbotron-cb">
+        <h1>Add Volume Page</h1>
+      </div>
+    </div>
+
+    <form action="{{ url_for('cb_add_publisher_page') }}" method="POST">
+
+      <table class="table_new" align="center">
+        <thead>
+          <h3>Publisher Information</h3>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="right">Publisher: </td>
+            <td align="left">
+              <input type="text" name="pub_name"></input><br>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td align="left">
+              <input type="submit" value="Submit" /><br>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </form>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+{% endblock %}

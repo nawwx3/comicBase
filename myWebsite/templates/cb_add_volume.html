@@ -1,0 +1,104 @@
+{% extends "cb_header.html" %}
+{% block body %}
+
+    <div class="container">
+      <div class="jumbotron jumbotron-cb">
+        <h1>Add Volume Page</h1>
+      </div>
+    </div>
+
+    <form action="{{ url_for('cb_add_volume_page') }}" method="POST">
+
+      <table class="table_new" align="center">
+        <thead>
+          <h3>Volume Information</h3>
+        </thead>
+        <tbody>
+          <tr>
+            <td align="right">Publisher: </td>
+            <td align="left">
+              <select name=publisher_dropdown>
+                {% for publisher in publishers %}
+              <option value={{ publisher[1] }}>{{ publisher[0] }}</option>
+                {% endfor %}
+              </select>
+            </td>
+          </tr>
+          <tr>
+            <td align="right">Volume Name: </td>
+            <td align="left">
+              <input type="text" name="volume_name"></input><br>
+            </td>
+          </tr>
+          <tr>
+            <td align="right">Volume Number:
+            <td align="left">
+              <input type="text" name="volume_number"></input><br>
+            </td>
+          </tr>
+          <tr>
+            <td align="right">Date Start:
+            <td align="left">
+              <select name=date_start_month_dropdown>
+                <option selected>January</option>
+                <option>February</option>
+                <option>March</option>
+                <option>April</option>
+                <option>May</option>
+                <option>June</option>
+                <option>July</option>
+                <option>August</option>
+                <option>September</option>
+                <option>October</option>
+                <option>November</option>
+                <option>December</option>
+              </select>
+              <input type="text" maxlength="4" size="4" name="date_start_year"></input><br>
+            </td>
+          </tr>
+          <tr>
+            <td align="right">Date End:
+            <td align="left">
+              <select name=date_end_month_dropdown>
+                <option selected>ONGOING</option>
+                <option>January</option>
+                <option>February</option>
+                <option>March</option>
+                <option>April</option>
+                <option>May</option>
+                <option>June</option>
+                <option>July</option>
+                <option>August</option>
+                <option>September</option>
+                <option>October</option>
+                <option>November</option>
+                <option>December</option>
+              </select>
+              <input type="text" maxlength="4" size="4" name="date_end_year"></input><br>
+            </td>
+          </tr>
+          <tr>
+            <td align="right">Link:
+            <td align="left">
+              <input type="text" name="link"></input><br>
+            </td>
+          </tr>
+        </tbody>
+        <tfoot>
+          <tr>
+            <td></td>
+            <td align="left">
+              <input type="submit" value="Submit" /><br>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
+    </form>
+
+    <br>
+    <br>
+    <br>
+    <br>
+    <br>
+
+{% endblock %}

@@ -39,7 +39,16 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('cb_add_comic_page') }}">Add</a>
+              <div class="dropdown">
+               <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Add
+               <span class="caret"></span></button>
+               <ul class="dropdown-menu">
+                 <li><a href="{{ url_for('cb_add_comic_page') }}">Comic</a></li>
+                 <!-- <li><a class="nav-link" href="{{ url_for('cb_add_comic_page') }}">Comic</a></li> -->
+                 <li><a href="{{ url_for('cb_add_volume_page')  }}">Volume</a></li>
+                 <li><a href="{{ url_for('cb_add_publisher_page')  }}">Publisher</a></li>
+               </ul>
+              </div>
             </li>
 
             <li class="nav-item">
@@ -57,6 +66,13 @@
 
           <!-- right side navbar -->
           <ul class="navbar-nav ml-auto">
+            <div class="dropdown">
+               <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Account<span class="caret"></span></button>
+               <ul class="dropdown-menu">
+                 <li><a href="{{ url_for('cb_export_data') }}">Export Data</a></li>
+                 <!-- <li><a class="nav-link" href="{{ url_for('cb_add_comic_page') }}">Comic</a></li> -->
+               </ul>
+              </div>
             <li class="nav-item active">
               <a class="nav-link" href="{{ url_for('cb_logout_page') }}">Logout</a>
             </li>

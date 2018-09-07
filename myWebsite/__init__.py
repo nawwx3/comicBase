@@ -4,7 +4,8 @@ from functools import wraps
 import os
 
 from comicBase.comicBase import cb_home, cb_login, cb_logout
-from comicBase.comicBase import cb_add_comic, cb_delete, cb_unified_search
+from comicBase.comicBase import cb_add_comic, cb_add_volume, cb_add_publisher
+from comicBase.comicBase import cb_delete, cb_export #, cb_unified_search
 from comicBase.comicBase import cb_display, cb_display_tables, cb_display_table_info, cb_volume_info
 
 from app.app import app_login
@@ -79,6 +80,16 @@ def cb_logout_page():
 def cb_add_comic_page(issue="", volume=""):
     return cb_add_comic(issue, volume)
 
+# add volume screen
+@app.route('/comicBase/add_volume', methods=['GET', 'POST'])
+def cb_add_volume_page():
+    return cb_add_volume()
+
+# add publisher screen
+@app.route('/comicBase/add_publisher', methods=['GET', 'POST'])
+def cb_add_publisher_page():
+    return cb_add_publisher()
+
 # displays all the comics
 @app.route('/comicBase/display_comics')
 def cb_display_page():
@@ -108,6 +119,9 @@ def cb_display_table_info_page(id):
 def cb_volume_info_page():
     return cb_volume_info()
 
+@app.route('/comicBase/export')
+def cb_export_data():
+    return cb_export()
 
 ########################################
 #####                              #####

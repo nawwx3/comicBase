@@ -1,6 +1,9 @@
 from flask import Flask, render_template, session, request, flash, redirect, url_for, g
 from functools import wraps
 import sqlite3
+import urllib.request
+import pandas as pd
+import zipfile
 
 # works on server
 # import helper
@@ -40,7 +43,6 @@ def cb_logout(app):
 
 @require_login
 def cb_add_comic(issue, volume):
-    print('happening')
     if request.method == 'POST':
         try:
             vol_id = request.form['volume_dropdown']
@@ -49,7 +51,7 @@ def cb_add_comic(issue, volume):
             arc = request.form['arc']
             price = request.form['price']
 
-            # open a connection to the database
+
             # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
             with sqlite3.connect(helper.database_location) as conn:
                 cur = conn.cursor()
@@ -64,7 +66,7 @@ def cb_add_comic(issue, volume):
         except Exception as e:
             conn.rollback()
             print('exception', e)
-            flash('error in insert operation', 'error')
+            flash('error in comic insert operation', 'error')
 
         finally:
             return redirect(url_for('cb_display_page'))
@@ -75,12 +77,87 @@ def cb_add_comic(issue, volume):
 
             cur.execute(''' SELECT vol_name, vol_number, vol_id
                             FROM Volumes
+                            ORDER BY vol_name ASC, vol_number ASC
                         ''')
             volumes = cur.fetchall()
         return render_template('cb_add_comic.html', issue=issue, volume=volume, volumes=volumes)
 
 
     return render_template('cb_add_comic.html', issue=issue, volume=volume)
+
+@require_login
+def cb_add_volume():
+    if request.method == 'POST':
+        try:
+            pub_id = request.form['publisher_dropdown']
+            vol_name = request.form['volume_name']
+            vol_number = request.form['volume_number']
+            month_start = request.form['date_start_month_dropdown']
+            year_start = request.form['date_start_year']
+            month_end = request.form['date_end_month_dropdown']
+            year_end = request.form['date_end_year']
+            link = request.form['link']
+
+
+            # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
+            with sqlite3.connect(helper.database_location) as conn:
+                cur = conn.cursor()
+
+                cur.execute(''' INSERT INTO Volumes
+                                VALUES(?, ?, ?, ?, ?, ?, ?, ?, ?)
+                            ''', [None, pub_id, vol_name, vol_number, month_start, year_start, month_end, year_end, link])
+
+            conn.commit()
+            flash('Volume successfully added!')
+
+        except Exception as e:
+            conn.rollback()
+            print('exception', e)
+            flash('error in volume insertion operation', 'error')
+
+        finally:
+            return redirect(url_for('cb_display_page'))
+
+    if request.method == 'GET':
+        with sqlite3.connect(helper.database_location) as conn:
+            cur = conn.cursor()
+
+            cur.execute(''' SELECT pub_name, pub_id
+                            FROM Publishers
+                            ORDER BY pub_name ASC
+                        ''')
+            publishers = cur.fetchall()
+        return render_template('cb_add_volume.html', publishers=publishers)
+
+    return render_template('cb_add_volume.html')
+
+@require_login
+def cb_add_publisher():
+    if request.method == 'POST':
+        try:
+            pub_name = request.form['pub_name']
+
+
+            # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
+            with sqlite3.connect(helper.database_location) as conn:
+                cur = conn.cursor()
+
+                cur.execute(''' INSERT INTO Publishers
+                                VALUES(?, ?)
+                            ''', [None, pub_name])
+
+            conn.commit()
+            flash('Volume successfully added!')
+
+        except Exception as e:
+            conn.rollback()
+            print('exception', e)
+            flash('error in publisher insertion operation', 'error')
+
+        finally:
+            return redirect(url_for('cb_display_page'))
+
+    return render_template('cb_add_publisher.html')
 
 @require_login
 def cb_delete(id):
@@ -210,7 +287,33 @@ def cb_display_table_info(id):
 def cb_volume_info():
     return render_template('cb_volume_info_page.html')
 
+@require_login
+def cb_export():
 
+    conn = sqlite3.connect(helper.database_location)
+
+    publishers_df = pd.read_sql_query(''' SELECT * FROM Publishers ''', conn)
+    publishers_df.to_csv(path_or_buf='Publishers.csv', index=False)
+
+    volumes_df = pd.read_sql_query(''' SELECT * FROM Volumes ''', conn)
+    volumes_df.to_csv(path_or_buf='Volumes.csv', index=False)
+
+    comics_df = pd.read_sql_query(''' SELECT * FROM Comics ''', conn)
+    comics_df.to_csv(path_or_buf='Comics.csv', index=False)
+
+    graphic_novels_df = pd.read_sql_query(''' SELECT * FROM GraphicNovels ''', conn)
+    graphic_novels_df.to_csv(path_or_buf='GraphicNovels.csv', index=False)
+
+    zf = zipfile.ZipFile('comicBase_info.zip', mode='w')
+    try:
+        zf.write('Publishers.csv')
+        zf.write('Volumes.csv')
+        zf.write('Comics.csv')
+        zf.write('GraphicNovels.csv')
+    finally:
+        zf.close()
+
+    return render_template('cb_home.html')
 
 
 
