@@ -19,7 +19,11 @@
             <td align="left">
               <select name=volume_dropdown>
                 {% for volume in volumes %}
-              <option value={{ volume[2] }}>{{ volume[0] }} V{{ volume[1] }}</option>
+                  {% if volume[1] == "" %}
+                    <option value={{ volume[2] }}>{{ volume[0] }}</option>
+                  {% else %}
+                    <option value={{ volume[2] }}>{{ volume[0] }} V{{ volume[1] }}</option>
+                  {% endif %}
                 {% endfor %}
               </select>
             </td>

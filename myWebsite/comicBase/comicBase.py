@@ -42,7 +42,7 @@ def cb_logout(app):
     return redirect(url_for('cb_home_page'))
 
 @require_login
-def cb_add_comic(issue, volume):
+def cb_add_comic(id):
     if request.method == 'POST':
         try:
             vol_id = request.form['volume_dropdown']
@@ -50,7 +50,6 @@ def cb_add_comic(issue, volume):
             title = request.form['title']
             arc = request.form['arc']
             price = request.form['price']
-
 
             # with sqlite3.connect('/var/www/myWebsite/myWebsite/comics_database.db') as conn:
             with sqlite3.connect(helper.database_location) as conn:
@@ -72,18 +71,31 @@ def cb_add_comic(issue, volume):
             return redirect(url_for('cb_display_page'))
 
     if request.method == 'GET':
+        print('inside get')
         with sqlite3.connect(helper.database_location) as conn:
             cur = conn.cursor()
 
-            cur.execute(''' SELECT vol_name, vol_number, vol_id
-                            FROM Volumes
-                            ORDER BY vol_name ASC, vol_number ASC
-                        ''')
-            volumes = cur.fetchall()
-        return render_template('cb_add_comic.html', issue=issue, volume=volume, volumes=volumes)
+            if id == '':
+                print('id blank')
+                # this is business as usual
+                cur.execute(''' SELECT vol_name, vol_number, vol_id
+                                FROM Volumes
+                                ORDER BY vol_name ASC, vol_number ASC
+                            ''')
+                volumes = cur.fetchall()
+                return render_template('cb_add_comic.html', volumes=volumes)
 
+            else:
+                print('id here')
+                cur.execute(''' SELECT vol_name, vol_number, vol_id
+                                FROM Volumes
+                                WHERE vol_id == ?
+                            ''', [id])
+                volumes = cur.fetchall()
+                print('volume: ', volumes)
+                return render_template('cb_add_comic.html', volumes=volumes)
 
-    return render_template('cb_add_comic.html', issue=issue, volume=volume)
+    return render_template('cb_add_comic.html', volumes=volumes)
 
 @require_login
 def cb_add_volume():
@@ -281,12 +293,13 @@ def cb_display_table_info(id):
                         FROM Volumes
                         WHERE vol_id == ?
                     ''', [id])
-        vol_info = cur.fetchall()
+        vol_info = cur.fetchall()[0]
+        print(vol_info)
 
     issue = rows[0][0]
     volume = rows[0][2]
 
-    return render_template('cb_display_table_info.html', rows=rows, issue=issue, volume=volume, vol_info)
+    return render_template('cb_display_table_info.html', rows=rows, issue=issue, volume=volume, vol_info=vol_info, id=id)
 
 @require_login
 def cb_volume_info():

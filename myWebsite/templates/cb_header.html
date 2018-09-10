@@ -30,25 +30,24 @@
       <div class="collapse navbar-collapse" id="navbar_options">
         {% if session['logged_in'] %}
           <ul class="navbar-nav mr-auto">
-            <li class="nav-item active">
-              <a class="nav-link" href="{{ url_for('cb_display_page') }}">Display All <span class="sr-only">(current)</span></a>
+            <li class="nav-item">
+              <a class="nav-link active" href="{{ url_for('cb_display_page') }}">Display All <span class="sr-only">(current)</span></a>
             </li>
 
            <li class="nav-item">
-              <a class="nav-link" href="{{ url_for('cb_display_tables_page') }}">Tables</a>
+              <a class="nav-link active" href="{{ url_for('cb_display_tables_page') }}">Tables</a>
             </li>
 
             <li class="nav-item">
-              <div class="dropdown">
-               <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Add
-               <span class="caret"></span></button>
-               <ul class="dropdown-menu">
-                 <li><a href="{{ url_for('cb_add_comic_page') }}">Comic</a></li>
-                 <!-- <li><a class="nav-link" href="{{ url_for('cb_add_comic_page') }}">Comic</a></li> -->
-                 <li><a href="{{ url_for('cb_add_volume_page')  }}">Volume</a></li>
-                 <li><a href="{{ url_for('cb_add_publisher_page')  }}">Publisher</a></li>
-               </ul>
+              <div class="dropdown show">
+                <a class="btn dropdown-toggle nav-link active" data-toggle="dropdown">Add</a>
+                <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
+                  <a class="dropdown-item" href="{{ url_for('cb_add_comic_page') }}">Comic</a>
+                  <a class="dropdown-item" href="{{ url_for('cb_add_volume_page')  }}">Volume</a>
+                  <a class="dropdown-item" href="{{ url_for('cb_add_publisher_page')  }}">Publisher</a>
+                </div>
               </div>
+
             </li>
 
             <li class="nav-item">

@@ -76,9 +76,9 @@ def cb_logout_page():
 
 # add comic screen
 @app.route('/comicBase/add_comic', methods=['GET', 'POST'])
-@app.route('/comicBase/add_comic_<issue>_<volume>', methods=['GET', 'POST'])
-def cb_add_comic_page(issue="", volume=""):
-    return cb_add_comic(issue, volume)
+@app.route('/comicBase/add_comic_<id>', methods=['GET', 'POST'])
+def cb_add_comic_page(id=""):
+    return cb_add_comic(id)
 
 # add volume screen
 @app.route('/comicBase/add_volume', methods=['GET', 'POST'])

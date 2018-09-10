@@ -1,9 +1,11 @@
 {% extends "cb_header.html" %}
 {% block body %}
+
 <div class="container-fluid partial">
 
-  <form action="{{ url_for('cb_add_comic_page', volume=volume, issue=issue) }}" name="new_comic">
+  <form action="{{ url_for('cb_add_comic_page', id=id) }}" name="new_comic">
     <h1>{{issue}} - {{volume}}</h1>
+    <h2>vol_info</h2>
     <input type="submit" value="Add Comic"/>
   </form>
 
@@ -11,21 +13,16 @@
     <tbody>
       <tr>
         <td align="right">Starting: </td>
-        <td align="left">
-          {{ vol_info[4] }} {{ vol_info[5] }}
+        <td align="left">  {{ vol_info[4] }} {{ vol_info[5] }}
         </td>
       </tr>
       <tr>
         <td align="right">Ending: </td>
-        <td align="left">
-          {{ vol_info[6] }} {{ vol_info[7] }}
-        </td>
+        <td align="left">  {{ vol_info[6] }} {{ vol_info[7] }}</td>
       </tr>
       <tr>
         <td align="right">Link: </td>
-        <td align="left">
-          {{ vol_info[8] }}
-        </td>
+        <td align="left">  {{ vol_info[8] }}</td>
       </tr>
     </tbody>
   </table>
