@@ -33,6 +33,15 @@ with app.open_resource('sql/new_rebirth_entries.sql', mode='r') as f:
 db.commit()
 print('Rebirth Entries Inintalized')
 
+with app.open_resource('sql/old_title_entries.sql', mode='r') as f:
+    cur.executescript(f.read())
+db.commit()
+print('Old Entries Inintalized')
+
+with app.open_resource('sql/new_marvel_entries.sql', mode='r') as f:
+    cur.executescript(f.read())
+db.commit()
+print('Old Marvel Entries Inintalized')
 
 print('Database Inintalized!')
 
