@@ -1,4 +1,4 @@
-This website has two parts. The first part is accessible by the domain name (which is currently not connected to the IP for reasons I don't understand / have not been able to fix) and is used to showcase who I am and some of the projects I have developed.  
+This website has two parts. The first part is accessible by the domain name and is used to showcase who I am and some of the projects I am working on.  
 The second part of this website is a comic book database that I have developed myself.
 
 # nathanwelch.me (part 1)
@@ -17,7 +17,7 @@ comicBase is a comic book database I have developed to cut down on the number of
 I am using these to run comicBase:
 - Apache
 - Flask
-- sqlite3
+- SQLite3
 
 ## Setup
 This would only happen when running on localhost
@@ -26,7 +26,7 @@ This would only happen when running on localhost
 $ python3 init_db.py
 ~~~
 
-- start the site
+- start the site (localhost)
 ~~~ shell
 $ python3 __init__.py
 ~~~
@@ -35,50 +35,70 @@ $ python3 __init__.py
 
 ### Setup
 When `init_db.py` is run
-- The following table is created (comes from "sql/tables.py"):
+- The following tables are created.
 
   ~~~ sql
-  CREATE TABLE comics (
-    id integer primary key autoincrement,
-    titles varchar(50) not null unique
-  );
-  ~~~
-- Any entries in the "sql/entries.py" file are added
-
-### Inserting Comics
-When comics are added using the "Add" page on the navbar, first the issue_name and the volume are pushed together to make a table name. This table is then created using this format:
-
-~~~ sql
-CREATE TABLE if not exists issue_name_volume (
-    id integer primary key autoincrement,
-    issue_number integer not null,
+  CREATE TABLE Comics (
+    comic_id integer primary key autoincrement,
+    vol_id integer not null,
+    issue_num integer not null,         -- issue number
     title varchar(100),
-    arc varchar(50),
-    price float
-);
-~~~
+    arc varchar(50),                    -- story line
+    price float,                        -- how much I paid/
+    FOREIGN KEY (vol_id) REFERENCES Volumes(vol_id)
+  );
 
-As is shown, if there is no table of that name it will be created. This also is unique to each issue_name, volume pair as each comic in that volume will create the same title name.  
+  CREATE TABLE Publishers (
+    pub_id integer primary key autoincrement,
+    pub_name varchar(50) not null unique
+  );
 
-This "issue_name_volume" title is then added into the previously mentioned "comics" table.
+  -- could make this into a "information about the volume" kind of thing
+  CREATE TABLE Volumes (
+    vol_id integer primary key autoincrement,
+    pub_id integer not null,
+    vol_name varchar(50) not null,
+    vol_number varchar(10) not null,
+    month_start varchar(3),   -- according to cover date
+    year_start integer,
+    month_end varchar(7),     -- ongoing
+    year_end integer,         -- "" means ongoing
+    link varchar(100),        -- link to comicbookdb.com's volume page
+    UNIQUE (vol_name, vol_number),
+    FOREIGN KEY (pub_id) REFERENCES Publishers(pub_id)
+  );
+
+  ~~~
+
+### Adding Entries
+
+#### Publishers
+This option adds a publisher into the _Publishers_ table.
+
+#### Volumes
+To add a volume into the _Volumes_ table, it's Publisher must already be in the _Publishers_ table as that field is filled by a dropdown of existing publishers.
+
+#### Comics
+To add a comic into the _Comics_ table, it's volume must already be in the _Volumes_ table as that field is filled by a dropdown of existing volumes.
 
 ### Deleting Comics
-When a comic is deleted, it first deletes the comic from it's assigned table. Then it checks to make sure the table it was deleted from is not empty. If it's not empty then it continues on. If it is empty, it drops the table then deletes the entry from the "comics" table.
-
+Deletes the comic from _Comics_ table based on the id.
 
 # Page Tabs
 ### Display All
-The page displays all the comics in the database. It starts off the top of the "comics" table printing the info from each table grabbed and moves onto the next one till it reaches the bottom if the "comics" table.
+The page displays all the comics in the database.
+
+### Tables
+Displays all the volumes in the _Volumes_ table routing to a table of the comics in that volume once clicked.
 
 ### Add
-This page pulls up an input form that then adds the info into the database when submitted.  
-Form validation is included to make sure at least an Issue Name, Issue Number, and Volume are included.
-
+Dropdown that allows for comics, volumes, and publishers to be added to the database.
 
 ### Search Bar
-First version of this had form checking. Now it is just an input box.
-Searches through all info and finds like terms in any of the table entries.
+Was implemented before database schema redesign. Will eventually be added back in.
 
+### Account
+Dropdown allowing the user to access account details
 
-
-# end
+#### Export Data
+Still testing. Working on being able to send csv's of database info to local computer.
