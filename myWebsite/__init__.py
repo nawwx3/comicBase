@@ -8,8 +8,6 @@ from comicBase.comicBase import cb_add_comic, cb_add_volume, cb_add_publisher
 from comicBase.comicBase import cb_delete, cb_export #, cb_unified_search
 from comicBase.comicBase import cb_display, cb_display_tables, cb_display_table_info, cb_volume_info
 
-from app.app import app_login
-
 app = Flask(__name__)
 app.config.from_object(__name__)
 

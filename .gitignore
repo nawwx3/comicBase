@@ -1,6 +1,10 @@
 myWebsite/venv/*
 to_include.md
 *.pyc
+*.save
+
+*.zip
+
 *.db
 
 r.txt
