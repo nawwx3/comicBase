@@ -1,19 +1,29 @@
 {% extends "cb_header.html" %}
 {% block body %}
-<div class="container-fluid partial">
-  <h1>Choose a table</h1>
-  Here lies all the issue/volume pairs of comics in this database
+  <div class="container-fluid partial">
+    <h1>Choose a table</h1>
+    Here lies all the issue/volume pairs of comics in this database
 
-  <br><br>
+    <br><br>
 
-  {% for row in rows %}
-    <div class="fancy_box">
-      {% if row[1] == "" %}
-        <a class="letters" href="{{ url_for('cb_display_table_info_page', id=row[2]) }}">{{ row[0] }}</a>
-      {% else %}
-        <a class="letters" href="{{ url_for('cb_display_table_info_page', id=row[2]) }}">{{ row[0] }}, Vol. {{ row[1] }}</a>
-      {% endif %}
+    {% for row in rows %}
+    <div>
+      
+      
+        <div class="fancy_box">
+        <img src="../static/cb_image.png" height="150px">
+          
+          <!-- if there is no volume number then don't display it -->
+          {% if row[1] == "" %}
+            <a class="letters" href="{{ url_for('cb_display_table_info_page', id=row[2]) }}">{{ row[0] }}</a>
+          {% else %}
+            <a class="letters" href="{{ url_for('cb_display_table_info_page', id=row[2]) }}">{{ row[0] }}, Vol. {{ row[1] }}</a>
+          {% endif %}
+        </div> 
     </div>
-  {% endfor %}
+    {% endfor %}
+    
+  </div>
+
 </div>
 {% endblock %}

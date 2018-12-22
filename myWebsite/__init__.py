@@ -12,6 +12,7 @@ app = Flask(__name__)
 app.config.from_object(__name__)
 
 app.config.update(dict(
+    DEBUG=True,
     DATABASE=os.path.join(app.root_path, 'comics_database.db'),
     SECRET_KEY='development_key',
     USERNAME='f',
