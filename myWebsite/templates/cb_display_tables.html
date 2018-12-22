@@ -11,7 +11,7 @@
       {% if row[1] == "" %}
         <a class="letters" href="{{ url_for('cb_display_table_info_page', id=row[2]) }}">{{ row[0] }}</a>
       {% else %}
-        <a class="letters" href="{{ url_for('cb_display_table_info_page', id=row[2]) }}">{{ row[0] }} - {{ row[1] }}</a>
+        <a class="letters" href="{{ url_for('cb_display_table_info_page', id=row[2]) }}">{{ row[0] }}, Vol. {{ row[1] }}</a>
       {% endif %}
     </div>
   {% endfor %}

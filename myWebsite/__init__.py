@@ -47,9 +47,9 @@ def projects():
 ########################################
 
 
-@app.route('/comicBase/a_log')
-def a_login():
-    return app_login('f', 'f')
+# @app.route('/comicBase/a_log')
+# def a_login():
+#     return app_login('f', 'f')
 
 
 ########################################
