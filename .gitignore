@@ -14,3 +14,6 @@ hold.txt
 input_files/
 
 *.zip
+
+myWebsite.conf
+000-default.conf
