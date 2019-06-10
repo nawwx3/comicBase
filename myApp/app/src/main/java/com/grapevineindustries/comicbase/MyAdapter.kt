@@ -18,14 +18,14 @@ class MyAdapter(private val myDataset: Array<String>) : RecyclerView.Adapter<MyA
 
         init {
             v.setOnClickListener { Log.d(TAG, "Element $adapterPosition clicked")}
-            textView = v.findViewById(R.id.textView);
+            textView = v.findViewById(R.id.textView)
         }
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): MyViewHolder {
         // create a new view
         val textView = LayoutInflater.from(parent.context)
-            .inflate(R.layout.file, parent, false)
+            .inflate(R.layout.recycler_item_volume, parent, false)
 
         //set the view's size, margins, paddings, and layout parameters
 
